@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* Bingle colours as Tailwind classes: bg-court, text-ink, border-line, bg-ball, ...
+   The values come from shared/styles/tokens.css, so dark mode follows automatically. */
+@theme inline {
+  --color-page: var(--bg);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-court: var(--court);
+  --color-teal: var(--teal);
+  --color-ball: var(--ball);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --color-mint: var(--mint);
+  --font-sans: var(--font-brand), system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+}
