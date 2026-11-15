@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Bingle colours as Tailwind classes: bg-court, text-ink, border-line, bg-ball, ...
+/* Bink colours as Tailwind classes: bg-court, text-ink, border-line, bg-ball, ...
    The values come from shared/styles/tokens.css, so dark mode follows automatically. */
 @theme inline {
   --color-page: var(--bg);

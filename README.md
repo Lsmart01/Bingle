@@ -1,4 +1,4 @@
-# Bingle
+# Bink
 
 Find pickleball players your level in Victoria.
 
@@ -25,7 +25,7 @@ Other commands: `npm run build` makes a production build, and `npm run lint` che
 ## How this repo is organized
 
 ```
-Bingle/
+Bink/
 ├── app/                      Pages and URLs (each folder is a URL)
 │   ├── (website)/            Public site: homepage now; about, FAQ, login, sign-up later
 │   └── (app)/                Signed-in app: profile, players, events, hill (not built yet)
@@ -48,9 +48,9 @@ Each folder has a README with more detail.
 
 ## Deploying
 
-Bingle is hosted on Vercel. To set it up, import this GitHub repo at [vercel.com/new](https://vercel.com/new). Vercel detects Next.js, so the default settings work. After that, every push to `main` updates the live site, and every other branch gets its own preview link.
+Bink is hosted on Vercel. To set it up, import this GitHub repo at [vercel.com/new](https://vercel.com/new). Vercel detects Next.js, so the default settings work. After that, every push to `main` updates the live site, and every other branch gets its own preview link.
 
-Vercel's free plan is for non-commercial projects only, so Bingle needs the Pro plan.
+Vercel's free plan is for non-commercial projects only, so Bink needs the Pro plan.
 
 ## Notes for coding agents
 

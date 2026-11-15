@@ -1,4 +1,4 @@
-/* Bingle website styles, carried over from the original single-file landing page.
+/* Bink website styles, carried over from the original single-file landing page.
    Colours live in shared/styles/tokens.css; the font comes from shared/styles/fonts.ts. */
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}

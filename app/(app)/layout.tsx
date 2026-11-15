@@ -5,7 +5,7 @@ import "@/shared/styles/tokens.css";
 import "./app.css";
 
 export const metadata: Metadata = {
-  title: "Bingle",
+  title: "Bink",
 };
 
 // Root layout for the signed-in app (styled with Tailwind). There are no app
