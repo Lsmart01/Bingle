@@ -1,0 +1,201 @@
+<title>Bink Headline Styles</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@700;800&family=Anton&family=Archivo:wdth,wght@125,900&family=Bebas+Neue&family=DM+Serif+Display:ital@1&family=Syne:wght@800&family=Unbounded:wght@800&family=Barlow+Condensed:ital,wght@1,800&family=Big+Shoulders+Display:wght@900&family=Permanent+Marker&family=Space+Grotesk:wght@500;700&family=Barlow+Condensed:wght@600&family=Inter+Tight:wght@500;600&display=swap">
+<style>
+/* Layout: a gallery of ten headline treatments, each previewed on the real hero photo with the black left edge.
+   The page follows the viewer's theme; the previews are fixed artwork in Bink's colours. */
+:root{
+  --bg:#f5f3ee; --fg:#121a21; --muted:#59636c; --card:#ffffff; --rule:#ddd8ce;
+  --lime:#b6f03c; --ink:#121a21; --night:#0b0e12;
+  --ui:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --head:'Inter Tight','Helvetica Neue',Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1418;--fg:#eef0ec;--muted:#a3adb5;--card:#172028;--rule:#28333c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1418;--fg:#eef0ec;--muted:#a3adb5;--card:#172028;--rule:#28333c;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--ui);line-height:1.5}
+.page{max-width:80rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:2.5rem 4rem}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem}
+header h1{font-family:var(--head);font-weight:800;text-transform:uppercase;letter-spacing:-.03em;font-size:clamp(2.2rem,5vw,3.4rem);line-height:.95;margin:0}
+header p{margin:0;color:var(--muted);max-width:30rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,34rem),1fr));gap:1.1rem}
+.opt{background:var(--card);border:1px solid var(--rule);border-radius:1rem;overflow:hidden;min-width:0}
+.art{aspect-ratio:16/9;display:flex;align-items:center;padding:1.4rem 1.8rem;color:#fff;
+  background:linear-gradient(90deg,var(--night) 0%,rgba(11,14,18,.94) 32%,rgba(11,14,18,.55) 55%,rgba(11,14,18,.05) 85%),url(stock/forehand.jpg) 72% 40%/cover var(--night)}
+.cap{padding:.9rem 1.15rem 1.1rem;border-top:1px solid var(--rule);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;align-items:baseline}
+.cap b{font-family:var(--head);font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.cap b small{font-family:var(--ui);font-weight:600;font-size:.7rem;color:var(--muted);letter-spacing:.12em;margin-left:.4rem}
+.cap span{color:var(--muted);font-size:.86rem}
+.h{margin:0;max-width:62%;line-height:.94;font-size:clamp(2rem,4.2vw,3.4rem)}
+.g{color:var(--lime)}
+
+/* 01 Current: Inter Tight */
+.s1{font-family:var(--head);font-weight:800;text-transform:uppercase;letter-spacing:-.035em}
+
+/* 02 Anton + marker block */
+.s2{font-family:Anton,Impact,sans-serif;text-transform:uppercase;letter-spacing:.01em;font-size:clamp(2.3rem,4.8vw,3.9rem);line-height:1}
+.s2 .g{display:inline-block;color:var(--ink);background:var(--lime);padding:0 .14em;transform:skew(-8deg);margin-top:.08em}
+.s2 .g span{display:inline-block;transform:skew(8deg)}
+
+/* 03 Archivo Expanded + outline */
+.s3{font-family:Archivo,Arial,sans-serif;font-stretch:125%;font-weight:900;text-transform:uppercase;letter-spacing:-.01em;font-size:clamp(1.7rem,3.4vw,2.8rem)}
+.s3 .g{color:transparent;-webkit-text-stroke:2px var(--lime)}
+
+/* 04 Bebas Neue + brush underline */
+.s4{font-family:'Bebas Neue',Impact,sans-serif;letter-spacing:.02em;font-size:clamp(2.6rem,5.4vw,4.4rem);line-height:.92}
+.s4 .g{position:relative;display:inline-block}
+.s4 .g::after{content:"";position:absolute;left:-.04em;right:-.06em;bottom:-.14em;height:.2em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M4 14 C 50 5, 120 3, 196 9' stroke='%23b6f03c' stroke-width='7' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+
+/* 05 Sans + serif italic */
+.s5{font-family:var(--head);font-weight:800;text-transform:uppercase;letter-spacing:-.035em;font-size:clamp(1.9rem,3.8vw,3.1rem)}
+.s5 .g{display:block;font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-weight:400;text-transform:none;letter-spacing:-.01em;font-size:1.55em;line-height:.9;margin-top:.04em}
+
+/* 06 Syne + highlighter swipe */
+.s6{font-family:Syne,Arial,sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:-.02em;font-size:clamp(1.9rem,3.9vw,3.2rem);line-height:1.08}
+.s6 .g{color:#fff;background:linear-gradient(transparent 58%,rgba(182,240,60,.9) 58% 92%,transparent 92%);padding:0 .06em}
+
+/* 07 Unbounded + pill */
+.s7{font-family:Unbounded,Arial,sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:-.02em;font-size:clamp(1.5rem,3vw,2.5rem);line-height:1.08}
+.s7 .g{display:inline-block;color:var(--ink);background:var(--lime);border-radius:999px;padding:.06em .42em .1em;margin-top:.12em}
+
+/* 08 Barlow Condensed italic + echo */
+.s8{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-style:italic;font-weight:800;text-transform:uppercase;letter-spacing:.01em;font-size:clamp(2.5rem,5.2vw,4.3rem);line-height:.88}
+.s8 .g{text-shadow:-.045em .045em 0 rgba(182,240,60,.45),-.09em .09em 0 rgba(182,240,60,.22),-.135em .135em 0 rgba(182,240,60,.1)}
+
+/* 09 Big Shoulders + hand-drawn circle */
+.s9{font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:.01em;font-size:clamp(2.6rem,5.4vw,4.4rem);line-height:.9}
+.s9 .g{position:relative;display:inline-block;color:#fff;margin-top:.1em}
+.s9 .g::after{content:"";position:absolute;inset:-.26em -.36em -.22em -.3em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'%3E%3Cpath d='M34 18 C 86 2, 182 8, 192 48 C 199 88, 62 99, 18 72 C -4 56, 18 24, 76 12' stroke='%23b6f03c' stroke-width='3.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+
+/* ===== Subline options: chosen Marker Block headline + the new line in different faces ===== */
+.set{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin:2.4rem 0 1rem;padding-top:1.2rem;border-top:1px solid var(--rule)}
+.set h2{font-family:var(--head);font-weight:800;text-transform:uppercase;letter-spacing:.02em;font-size:1.15rem;margin:0}
+.set p{margin:0;color:var(--muted);font-size:.9rem}
+.set.first{margin-top:0}
+.stack{display:flex;flex-direction:column;align-items:flex-start;gap:.9rem;max-width:64%}
+.mk{font-family:Anton,Impact,sans-serif;text-transform:uppercase;letter-spacing:.01em;line-height:1;font-size:clamp(2rem,4vw,3.2rem);margin:0}
+.mk .g{display:inline-block;color:var(--ink);background:var(--lime);padding:0 .14em;transform:skew(-8deg);margin-top:.06em}
+.mk .g span{display:inline-block;transform:skew(8deg)}
+.sl{margin:0;max-width:24rem;line-height:1.25}
+.sl b{color:var(--lime)}
+.f1{font-family:var(--head);font-weight:600;font-size:1.3rem;letter-spacing:-.01em}
+.f1 b{font-weight:800}
+.f2{font-family:var(--ui);font-weight:600;font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;color:#d7dde2}
+.f2 b{font-weight:700}
+.f3{font-family:Anton,Impact,sans-serif;font-size:1.45rem;letter-spacing:.03em;text-transform:uppercase}
+.f3 b{font-weight:400}
+.f4{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:1.6rem;letter-spacing:-.005em}
+.f4 b{font-weight:400}
+.f5{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:600;font-size:1.5rem;letter-spacing:.08em;text-transform:uppercase}
+.f6{font-family:'Permanent Marker','Comic Sans MS',cursive;font-size:1.45rem;letter-spacing:.01em;transform:rotate(-2deg);transform-origin:left}
+.f6 b{font-weight:400}
+.f7{font-family:'Space Grotesk',Arial,sans-serif;font-weight:500;font-size:1.3rem;letter-spacing:-.01em}
+.f7 b{font-weight:700}
+.f8{font-family:var(--head);font-weight:500;font-size:1.1rem;letter-spacing:.02em;color:#d7dde2}
+.f8::before{content:"";display:inline-block;width:2.2rem;height:2px;background:var(--lime);vertical-align:middle;margin-right:.7rem}
+.f8 b{color:#fff;font-weight:700}
+
+/* 10 Ball as the O */
+.s10{font-family:var(--head);font-weight:800;text-transform:uppercase;letter-spacing:-.035em}
+.s10 svg{width:.72em;height:.72em;vertical-align:-.02em;margin:0 .01em}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="cball" viewBox="0 0 40 40">
+    <defs><clipPath id="cbc"><circle cx="20" cy="20" r="17.5"/></clipPath></defs>
+    <g clip-path="url(#cbc)"><rect width="40" height="40" fill="#86c81f"/><circle cx="17.6" cy="17.4" r="16.2" fill="#b6f03c"/></g>
+    <g fill="#121a21"><circle cx="20.4" cy="20.2" r="2.5"/><circle cx="28.4" cy="18.6" r="2.2"/><circle cx="12" cy="21.4" r="2.2"/><circle cx="24.6" cy="27.6" r="2.2"/><circle cx="16" cy="28.2" r="2.1"/><circle cx="23.4" cy="11.8" r="2.1"/><circle cx="14.8" cy="12.8" r="2"/></g>
+    <path d="M8.6 15.2 Q10.4 9.6 16.4 7.4" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="8" cy="19.2" r="1.3" fill="#fff"/>
+    <circle cx="20" cy="20" r="17.5" fill="none" stroke="#121a21" stroke-width="3"/>
+  </symbol>
+</svg>
+
+<div class="page">
+  <header>
+    <h1>Headline styles</h1>
+    <p>Font options for the home screen, shown on the real hero photo. First the new line under the headline, then the headline styles from the last round.</p>
+  </header>
+
+  <div class="set first"><h2>The line under the headline</h2><p>"Join Victoria's fastest growing community" in eight fonts, under the chosen Marker Block headline.</p></div>
+  <div class="grid">
+    <article class="opt"><div class="art"><div class="stack"><p class="mk">More than a<br><span class="g"><span>game.</span></span></p><p class="sl f1">Join Victoria's <b>fastest growing</b> community.</p></div></div>
+      <div class="cap"><b>Clean Bold <small>A</small></b><span>Inter Tight · on the site now</span></div></article>
+
+    <article class="opt"><div class="art"><div class="stack"><p class="mk">More than a<br><span class="g"><span>game.</span></span></p><p class="sl f2">Join Victoria's <b>fastest growing</b> community</p></div></div>
+      <div class="cap"><b>Spaced Caps <small>B</small></b><span>Inter · small, tracked capitals</span></div></article>
+
+    <article class="opt"><div class="art"><div class="stack"><p class="mk">More than a<br><span class="g"><span>game.</span></span></p><p class="sl f3">Join Victoria's <b>fastest growing</b> community</p></div></div>
+      <div class="cap"><b>Match the Headline <small>C</small></b><span>Anton · same font, smaller</span></div></article>
+
+    <article class="opt"><div class="art"><div class="stack"><p class="mk">More than a<br><span class="g"><span>game.</span></span></p><p class="sl f4">Join Victoria's <b>fastest growing</b> community.</p></div></div>
+      <div class="cap"><b>Warm Italic <small>D</small></b><span>DM Serif Display italic</span></div></article>
+
+    <article class="opt"><div class="art"><div class="stack"><p class="mk">More than a<br><span class="g"><span>game.</span></span></p><p class="sl f5">Join Victoria's <b>fastest growing</b> community</p></div></div>
+      <div class="cap"><b>Scoreboard <small>E</small></b><span>Barlow Condensed · sporty caps</span></div></article>
+
+    <article class="opt"><div class="art"><div class="stack"><p class="mk">More than a<br><span class="g"><span>game.</span></span></p><p class="sl f6">Join Victoria's <b>fastest growing</b> community!</p></div></div>
+      <div class="cap"><b>Handwritten <small>F</small></b><span>Permanent Marker · matches the marker block</span></div></article>
+
+    <article class="opt"><div class="art"><div class="stack"><p class="mk">More than a<br><span class="g"><span>game.</span></span></p><p class="sl f7">Join Victoria's <b>fastest growing</b> community.</p></div></div>
+      <div class="cap"><b>Modern Tech <small>G</small></b><span>Space Grotesk</span></div></article>
+
+    <article class="opt"><div class="art"><div class="stack"><p class="mk">More than a<br><span class="g"><span>game.</span></span></p><p class="sl f8">Join Victoria's <b>fastest growing</b> community</p></div></div>
+      <div class="cap"><b>Line Lead <small>H</small></b><span>Inter Tight · green rule leading in</span></div></article>
+  </div>
+
+  <div class="set"><h2>Headline styles</h2><p>Last round. Marker Block (02) is on the site.</p></div>
+  <div class="grid">
+    <article class="opt">
+      <div class="art"><h2 class="h s1">More than a <span class="g">game.</span></h2></div>
+      <div class="cap"><b>Current <small>01</small></b><span>Inter Tight · green word</span></div>
+    </article>
+
+    <article class="opt">
+      <div class="art"><h2 class="h s2">More than a <span class="g"><span>game.</span></span></h2></div>
+      <div class="cap"><b>Marker Block <small>02</small></b><span>Anton · slanted green block behind GAME</span></div>
+    </article>
+
+    <article class="opt">
+      <div class="art"><h2 class="h s3">More than a <span class="g">game.</span></h2></div>
+      <div class="cap"><b>Wide Outline <small>03</small></b><span>Archivo Expanded · GAME as a green outline</span></div>
+    </article>
+
+    <article class="opt">
+      <div class="art"><h2 class="h s4">More than a <span class="g">game.</span></h2></div>
+      <div class="cap"><b>Brush Stroke <small>04</small></b><span>Bebas Neue · green brush underline</span></div>
+    </article>
+
+    <article class="opt">
+      <div class="art"><h2 class="h s5">More than a <span class="g">game.</span></h2></div>
+      <div class="cap"><b>Sans + Script <small>05</small></b><span>Inter Tight with DM Serif italic for "game."</span></div>
+    </article>
+
+    <article class="opt">
+      <div class="art"><h2 class="h s6">More than a <span class="g">game.</span></h2></div>
+      <div class="cap"><b>Highlighter <small>06</small></b><span>Syne · green highlighter swipe</span></div>
+    </article>
+
+    <article class="opt">
+      <div class="art"><h2 class="h s7">More than a <span class="g">game.</span></h2></div>
+      <div class="cap"><b>Pill Tag <small>07</small></b><span>Unbounded · GAME in a green capsule</span></div>
+    </article>
+
+    <article class="opt">
+      <div class="art"><h2 class="h s8">More than a <span class="g">game.</span></h2></div>
+      <div class="cap"><b>Fast Break <small>08</small></b><span>Barlow Condensed italic · green echo trail</span></div>
+    </article>
+
+    <article class="opt">
+      <div class="art"><h2 class="h s9">More than a <span class="g">game.</span></h2></div>
+      <div class="cap"><b>Circled <small>09</small></b><span>Big Shoulders · hand-drawn green circle</span></div>
+    </article>
+
+    <article class="opt">
+      <div class="art"><h2 class="h s10" aria-label="More than a game.">M<svg aria-hidden="true"><use href="#cball"/></svg>re than a <span class="g">game.</span></h2></div>
+      <div class="cap"><b>Ball Swap <small>10</small></b><span>Inter Tight · the logo ball becomes the O</span></div>
+    </article>
+  </div>
+</div>

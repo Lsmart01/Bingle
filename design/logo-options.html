@@ -1,0 +1,373 @@
+<title>Bink Logo Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700;800&family=Bungee&family=Bangers&family=Rubik+Mono+One&family=Lilita+One&family=Shrikhand&family=Monoton&display=swap">
+<style>
+/* Layout: a gallery of nine logo concepts, each on its own coloured tile with a name and a one-line idea.
+   Tiles use Bink's brand colours as artwork; the page around them follows the viewer's theme. */
+:root{
+  --bg:#f5f3ee; --fg:#121a21; --muted:#59636c; --card:#ffffff; --rule:#ddd8ce;
+  --lime:#b6f03c; --ink:#121a21; --court:#2a5c8a; --chalk:#f5f3ee; --mint:#eef7d0;
+  --ui:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --head:'Inter Tight','Helvetica Neue',Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1418;--fg:#eef0ec;--muted:#a3adb5;--card:#172028;--rule:#28333c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1418;--fg:#eef0ec;--muted:#a3adb5;--card:#172028;--rule:#28333c;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--ui);line-height:1.5}
+.page{max-width:76rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:2.5rem 4rem}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;margin-bottom:2rem}
+h1{font-family:var(--head);font-weight:800;text-transform:uppercase;letter-spacing:-.03em;font-size:clamp(2.2rem,5vw,3.6rem);line-height:.95;margin:0}
+header p{margin:0;color:var(--muted);max-width:28rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,21rem),1fr));gap:1.1rem}
+.opt{background:var(--card);border:1px solid var(--rule);border-radius:1rem;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.art{aspect-ratio:4/3;display:grid;place-items:center;position:relative;overflow:hidden}
+.cap{padding:1rem 1.15rem 1.2rem;border-top:1px solid var(--rule)}
+.cap .n{font-family:var(--head);font-weight:800;text-transform:uppercase;letter-spacing:.02em;font-size:1rem;display:flex;gap:.6rem;align-items:baseline}
+.cap .n small{font-family:var(--ui);font-weight:600;font-size:.7rem;color:var(--muted);letter-spacing:.12em}
+.cap p{margin:.3rem 0 0;color:var(--muted);font-size:.9rem}
+.art svg{max-width:100%}
+
+/* 1 The Bounce */
+.a1{background:var(--chalk)}
+.l1{display:flex;align-items:flex-end;font-family:var(--head);font-weight:800;font-size:4.6rem;letter-spacing:-.06em;color:var(--ink);line-height:.8}
+.l1 svg{width:.95em;height:.95em;margin-right:.02em;animation:b1 1.6s cubic-bezier(.3,0,.6,1) infinite}
+.l1 span{display:inline-block;transform-origin:bottom;animation:s1 1.6s infinite}
+@keyframes b1{0%,100%{transform:translateY(0) scale(1.08,.9)}10%{transform:translateY(0) scale(1)}50%{transform:translateY(-1.1em)}90%{transform:translateY(0)}}
+@keyframes s1{0%,4%{transform:scaleY(.88) scaleX(1.04)}14%,90%{transform:none}}
+
+/* 2 Speed Ball */
+.a2{background:var(--court)}
+.l2{display:flex;align-items:center;gap:.15em;font-family:'Bungee',Impact,sans-serif;font-size:3.8rem;color:var(--lime);transform:skew(-12deg);text-shadow:.06em .06em 0 var(--ink)}
+.l2 .fly{position:relative;width:.95em;height:.95em}
+.l2 .fly svg{width:100%;height:100%;animation:spin 1.2s linear infinite}
+.l2 .fly::before{content:"";position:absolute;right:95%;top:22%;width:1.1em;height:56%;background:repeating-linear-gradient(180deg,#fff 0 .07em,transparent .07em .2em);opacity:.8;border-radius:2px;animation:zip .6s ease-in-out infinite alternate}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes zip{to{width:1.5em;opacity:.4}}
+
+/* 3 Comic Pop */
+.a3{background:var(--chalk) radial-gradient(circle,rgba(18,26,33,.13) 1.5px,transparent 2px) 0 0/12px 12px}
+.l3{width:88%;animation:pop 1.8s ease-in-out infinite}
+@keyframes pop{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.06) rotate(2deg)}}
+
+/* 4 The Paddle */
+.a4{background:var(--lime)}
+.l4{width:88%}
+.l4 .ballfly{animation:launch 1.6s ease-out infinite}
+@keyframes launch{0%{transform:translate(-8px,10px) scale(.8);opacity:0}20%{opacity:1}100%{transform:translate(8px,-6px) scale(1);opacity:1}}
+
+/* 5 Holey Moly */
+.a5{background:var(--ink)}
+.l5{font-family:'Rubik Mono One',Impact,sans-serif;font-size:4.4rem;line-height:1;letter-spacing:.02em;background:radial-gradient(circle,#4f7a0c 0 26%,transparent 30%) 0 0/.24em .24em,var(--lime);-webkit-background-clip:text;background-clip:text;color:transparent;animation:holes 4s linear infinite}
+@keyframes holes{to{background-position:.24em .24em,0 0}}
+
+/* 6 Over the Net */
+.a6{background:var(--court) linear-gradient(90deg,transparent calc(50% - 1px),rgba(255,255,255,.25) calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px))}
+.a6::after{content:"";position:absolute;left:8%;right:8%;bottom:22%;height:2px;background:rgba(255,255,255,.55)}
+.l6{position:relative;display:flex;align-items:flex-end;font-family:var(--head);font-weight:800;font-size:4.6rem;letter-spacing:-.05em;color:#fff;line-height:.82;padding-top:1.2em}
+.l6 .net{width:.16em;height:.95em;margin:0 .14em;border-top:.05em solid #fff;background:repeating-linear-gradient(0deg,rgba(255,255,255,.65) 0 2px,transparent 2px 7px),repeating-linear-gradient(90deg,rgba(255,255,255,.65) 0 2px,transparent 2px 5px)}
+.l6 .hx{position:absolute;left:0;bottom:.8em;width:.36em;height:.36em;animation:hx 1.5s linear infinite alternate}
+.l6 .hy{width:100%;height:100%;animation:hy .75s cubic-bezier(.2,.6,.4,1) infinite alternate}
+.l6 .hy svg{width:100%;height:100%}
+@keyframes hx{from{left:2%}to{left:84%}}
+@keyframes hy{from{transform:translateY(0)}to{transform:translateY(-.75em)}}
+
+/* 7 Binky the mascot */
+.a7{background:var(--mint)}
+.l7{width:90%}
+.l7 .body{animation:bob 2s ease-in-out infinite;transform-origin:70px 140px}
+.l7 .wink{transform-origin:84px 86px;animation:wink 3.2s infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(4deg)}}
+@keyframes wink{0%,86%,100%{transform:scaleY(1)}90%,94%{transform:scaleY(.12)}}
+
+/* 8 Club Badge */
+.a8{background:var(--lime)}
+.l8{width:78%}
+.l8 .ring{transform-origin:120px 90px;animation:spin 18s linear infinite}
+
+/* 9 Neon Night */
+.a9{background:#0b0e12 radial-gradient(ellipse at 50% 40%,rgba(182,240,60,.12),transparent 65%)}
+.l9{display:flex;align-items:center;gap:.25em;font-family:'Monoton',Impact,sans-serif;font-size:4.2rem;color:#e4ffa3;text-shadow:0 0 4px #d6ff6a,0 0 12px #b6f03c,0 0 28px #b6f03c,0 0 48px #7fb81a;animation:flick 4s infinite}
+.l9 svg{width:.9em;height:.9em;filter:drop-shadow(0 0 6px #b6f03c) drop-shadow(0 0 16px #b6f03c)}
+@keyframes flick{0%,18%,22%,60%,64%,100%{opacity:1}20%,62%{opacity:.35}}
+
+/* Section labels */
+.set{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin:2.4rem 0 1rem;padding-top:1.2rem;border-top:1px solid var(--rule)}
+.set:first-of-type{margin-top:0}
+.set h2{font-family:var(--head);font-weight:800;text-transform:uppercase;letter-spacing:.02em;font-size:1.15rem;margin:0}
+.set p{margin:0;color:var(--muted);font-size:.9rem}
+
+/* ===== Clean set ===== */
+.k-chalk{background:#f5f3ee}.k-white{background:#fff}.k-ink{background:#121a21}.k-lime{background:#b6f03c}.k-court{background:#2a5c8a}
+.c1{font-family:var(--head);font-weight:700;font-size:4.4rem;letter-spacing:-.045em;color:#121a21;line-height:1}
+.c1 .i{position:relative;display:inline-block}
+.c1 .i i{position:absolute;left:50%;top:.05em;width:.2em;height:.2em;margin-left:-.1em;border-radius:50%;background:#b6f03c;box-shadow:inset 0 0 0 .018em #121a21}
+.c2{display:flex;align-items:center;gap:.35em;font-family:var(--head);font-weight:600;font-size:3.4rem;letter-spacing:-.04em;color:#121a21}
+.c2 .mark{width:1.15em;height:1.15em;border-radius:50%;background:#b6f03c;display:grid;place-items:center;font-weight:800;font-size:1em;line-height:1;padding-bottom:.08em}
+.c3{display:flex;align-items:center;gap:.7em;font-family:var(--head);font-weight:600;font-size:2.2rem;letter-spacing:.32em;color:#f5f3ee}
+.c3 svg{width:1.6em;height:1.6em}
+.c4{display:flex;flex-direction:column;align-items:center;gap:.9rem;font-family:var(--head);font-weight:700;font-size:1.9rem;letter-spacing:-.03em;color:#121a21}
+.c4 svg{width:6.2rem;height:6.2rem;filter:drop-shadow(0 10px 18px rgba(18,26,33,.18))}
+.c5{text-align:center;font-family:var(--head);color:#121a21}
+.c5 .w{font-weight:700;font-size:3.2rem;letter-spacing:.34em;margin-right:-.34em;line-height:1}
+.c5 .r{display:flex;align-items:center;gap:.7rem;margin-top:.8rem;font-weight:600;font-size:.72rem;letter-spacing:.32em;color:#59636c}
+.c5 .r::before,.c5 .r::after{content:"";flex:1;height:1px;background:#121a21;opacity:.3;min-width:1.4rem}
+.c5{padding-top:2rem}
+.c5 .li{position:relative;display:inline-block}
+.c5 .li svg{position:absolute;left:calc(50% - .17em);bottom:calc(100% + .07em);width:.52em;height:.52em;margin-left:-.26em}
+.cs{width:86%}
+
+/* ===== Loud set (below) ===== */
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important}}
+</style>
+
+<!-- Shared drawings -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="g" cx="34%" cy="30%" r="78%">
+      <stop offset="0" stop-color="#e2ff8c"/><stop offset=".55" stop-color="#b6f03c"/><stop offset="1" stop-color="#7fb81a"/>
+    </radialGradient>
+  </defs>
+  <symbol id="ballB" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="18.6" fill="url(#g)" stroke="#121a21" stroke-width="1.6"/>
+    <g fill="#4f7a0c" opacity=".55">
+      <ellipse cx="33.4" cy="27.75" rx="1" ry="1.9" transform="rotate(30 33.4 27.75)"/><ellipse cx="20" cy="35" rx="1.9" ry="1"/>
+      <ellipse cx="6.6" cy="27.75" rx="1" ry="1.9" transform="rotate(-30 6.6 27.75)"/><ellipse cx="6.6" cy="12.25" rx="1" ry="1.9" transform="rotate(30 6.6 12.25)"/>
+      <ellipse cx="20" cy="5" rx="1.9" ry="1"/><ellipse cx="33.4" cy="12.25" rx="1" ry="1.9" transform="rotate(-30 33.4 12.25)"/>
+      <ellipse cx="29.2" cy="20" rx="1.2" ry="1.9"/><ellipse cx="10.8" cy="20" rx="1.2" ry="1.9"/>
+    </g>
+    <ellipse cx="13.5" cy="10.5" rx="5" ry="2.8" fill="#fff" opacity=".25" transform="rotate(-30 13.5 10.5)"/>
+    <text x="20.4" y="27.4" text-anchor="middle" font-family="'Inter Tight',Arial,sans-serif" font-weight="800" font-size="21" fill="#121a21">B</text>
+  </symbol>
+  <symbol id="cball" viewBox="0 0 40 40">
+    <defs><clipPath id="cb-clip2"><circle cx="20" cy="20" r="17.5"/></clipPath></defs>
+    <g clip-path="url(#cb-clip2)">
+      <rect width="40" height="40" fill="#86c81f"/>
+      <circle cx="17.6" cy="17.4" r="16.2" fill="#b6f03c"/>
+    </g>
+    <g fill="#121a21">
+      <circle cx="20.4" cy="20.2" r="2.5"/><circle cx="28.4" cy="18.6" r="2.2"/><circle cx="12" cy="21.4" r="2.2"/>
+      <circle cx="24.6" cy="27.6" r="2.2"/><circle cx="16" cy="28.2" r="2.1"/><circle cx="23.4" cy="11.8" r="2.1"/><circle cx="14.8" cy="12.8" r="2"/>
+    </g>
+    <path d="M8.6 15.2 Q10.4 9.6 16.4 7.4" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="8" cy="19.2" r="1.3" fill="#fff"/>
+    <circle cx="20" cy="20" r="17.5" fill="none" stroke="#121a21" stroke-width="3"/>
+  </symbol>
+  <symbol id="ball" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="18.6" fill="url(#g)" stroke="#121a21" stroke-width="1.6"/>
+    <g fill="#4f7a0c" opacity=".6">
+      <circle cx="20" cy="20" r="2.4"/><ellipse cx="28.8" cy="20" rx="1.5" ry="2.2"/><ellipse cx="11.2" cy="20" rx="1.5" ry="2.2"/>
+      <ellipse cx="24.4" cy="27.6" rx="1.5" ry="2.2" transform="rotate(60 24.4 27.6)"/><ellipse cx="15.6" cy="27.6" rx="1.5" ry="2.2" transform="rotate(-60 15.6 27.6)"/>
+      <ellipse cx="24.4" cy="12.4" rx="1.5" ry="2.2" transform="rotate(-60 24.4 12.4)"/><ellipse cx="15.6" cy="12.4" rx="1.5" ry="2.2" transform="rotate(60 15.6 12.4)"/>
+    </g>
+    <ellipse cx="13.5" cy="10.5" rx="5" ry="2.8" fill="#fff" opacity=".25" transform="rotate(-30 13.5 10.5)"/>
+  </symbol>
+</svg>
+
+<div class="page">
+  <header>
+    <h1>Bink logo lab</h1>
+    <p>Two sets of directions for the Bink logo: clean and simple first, then loud and playful. Every one uses the bright green ball, so any of them could slot into the site.</p>
+  </header>
+
+  <div class="set"><h2>Clean &amp; simple</h2><p>Quiet shapes, lots of space, a single touch of green.</p></div>
+  <div class="grid">
+    <!-- C1 -->
+    <article class="opt">
+      <div class="art k-chalk"><div class="c1" role="img" aria-label="bink wordmark with a green ball as the dot of the i">b<span class="i">ı<i></i></span>nk</div></div>
+      <div class="cap"><div class="n">Ball Dot <small>C1</small></div><p>A plain lowercase wordmark. The only flourish is the green ball sitting where the dot of the i would be.</p></div>
+    </article>
+
+    <!-- C2 -->
+    <article class="opt">
+      <div class="art k-white"><div class="c2" role="img" aria-label="green circle with a b, next to the word bink"><span class="mark">b</span>bink</div></div>
+      <div class="cap"><div class="n">Green Dot <small>C2</small></div><p>A green circle with a "b" that doubles as the app icon, next to a calm wordmark.</p></div>
+    </article>
+
+    <!-- C3 -->
+    <article class="opt">
+      <div class="art k-ink"><div class="c3" role="img" aria-label="outline pickleball next to widely spaced BINK">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" stroke="#b6f03c" stroke-width="2.2"/><g fill="#b6f03c"><circle cx="20" cy="20" r="2"/><circle cx="28" cy="20" r="1.7"/><circle cx="12" cy="20" r="1.7"/><circle cx="24" cy="26.9" r="1.7"/><circle cx="16" cy="26.9" r="1.7"/><circle cx="24" cy="13.1" r="1.7"/><circle cx="16" cy="13.1" r="1.7"/></g></svg>BINK</div></div>
+      <div class="cap"><div class="n">Line Ball <small>C3</small></div><p>A thin outline ball with its holes, beside widely spaced capitals. Sleek on dark backgrounds.</p></div>
+    </article>
+
+    <!-- C4 -->
+    <article class="opt">
+      <div class="art k-lime"><div class="c4" role="img" aria-label="app icon: a b made from a stem and a ring, above the word bink">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="26" fill="#121a21"/><rect x="29" y="18" width="11" height="62" rx="5.5" fill="#b6f03c"/><circle cx="56" cy="60" r="18.5" fill="none" stroke="#b6f03c" stroke-width="11"/></svg>bink</div></div>
+      <div class="cap"><div class="n">Geo b <small>C4</small></div><p>A "b" built from one line and one ring, the ring standing in for the ball. Made for the app icon.</p></div>
+    </article>
+
+    <!-- C5 -->
+    <article class="opt">
+      <div class="art k-white"><div class="c5" role="img" aria-label="BINK in spaced capitals with a pickleball on the I, over the word Pickleball"><div class="w">B<span class="li">I<svg aria-hidden="true"><use href="#cball"/></svg></span>NK</div><div class="r"><span>PICKLEBALL</span></div></div></div>
+      <div class="cap"><div class="n">Club Mark <small>C5 · chosen</small></div><p>A classic sports-club lockup: spaced capitals with the ball sitting on the I, over a fine rule. Timeless and grown-up.</p></div>
+    </article>
+
+    <!-- C6 -->
+    <article class="opt">
+      <div class="art k-chalk">
+        <svg class="cs" viewBox="0 0 240 140" role="img" aria-label="bink wordmark with a dotted arc leading to a green ball">
+          <path d="M44 62 Q120 -6 196 34" fill="none" stroke="#121a21" stroke-width="2" stroke-dasharray="1 7" stroke-linecap="round" opacity=".55"/>
+          <circle cx="203" cy="38" r="10" fill="#b6f03c" stroke="#121a21" stroke-width="1.8"/>
+          <text x="34" y="116" font-family="'Inter Tight',Arial,sans-serif" font-weight="700" font-size="64" letter-spacing="-3" fill="#121a21">bink</text>
+        </svg>
+      </div>
+      <div class="cap"><div class="n">Lob <small>C6</small></div><p>A soft dotted arc lifts off the word and lands on the ball, like a gentle lob over the net.</p></div>
+    </article>
+
+    <!-- C7 -->
+    <article class="opt">
+      <div class="art k-court">
+        <svg class="cs" viewBox="0 0 240 140" role="img" aria-label="bink sitting on a white court line with a ball at the end">
+          <text x="26" y="92" font-family="'Inter Tight',Arial,sans-serif" font-weight="600" font-size="62" letter-spacing="-2.5" fill="#fff">bink</text>
+          <line x1="20" y1="102" x2="222" y2="102" stroke="#fff" stroke-width="3"/>
+          <circle cx="206" cy="91" r="9" fill="#b6f03c"/>
+        </svg>
+      </div>
+      <div class="cap"><div class="n">Baseline <small>C7</small></div><p>The word rests on a white court line, with the ball waiting at the end of it. Simple and sporty.</p></div>
+    </article>
+
+    <!-- C8 -->
+    <article class="opt">
+      <div class="art k-white">
+        <svg class="cs" viewBox="0 0 240 140" role="img" aria-label="two overlapping circles in green and blue beside the word bink">
+          <circle cx="46" cy="70" r="22" fill="#b6f03c"/>
+          <circle cx="70" cy="70" r="22" fill="#2a5c8a" opacity=".85" style="mix-blend-mode:multiply"/>
+          <text x="104" y="88" font-family="'Inter Tight',Arial,sans-serif" font-weight="600" font-size="50" letter-spacing="-2" fill="#121a21">bink</text>
+        </svg>
+      </div>
+      <div class="cap"><div class="n">Doubles <small>C8</small></div><p>Two overlapping circles, two players meeting. A quiet nod to doubles and to community.</p></div>
+    </article>
+
+    <!-- C9 -->
+    <article class="opt">
+      <div class="art k-chalk">
+        <svg class="cs" viewBox="0 0 240 140" role="img" aria-label="a paddle shaped like a b followed by ink, reading bink">
+          <rect x="40" y="18" width="12" height="54" rx="6" fill="#121a21"/>
+          <rect x="40" y="56" width="58" height="62" rx="20" fill="#121a21"/>
+          <g fill="#b6f03c"><circle cx="62" cy="80" r="3"/><circle cx="76" cy="80" r="3"/><circle cx="69" cy="93" r="3"/><circle cx="62" cy="106" r="3"/><circle cx="76" cy="106" r="3"/></g>
+          <text x="104" y="118" font-family="'Inter Tight',Arial,sans-serif" font-weight="700" font-size="66" letter-spacing="-3" fill="#121a21">ink</text>
+        </svg>
+      </div>
+      <div class="cap"><div class="n">Paddle b <small>C9</small></div><p>The handle and paddle head form the "b", then "ink" finishes the word. Clever, but still calm.</p></div>
+    </article>
+  </div>
+
+  <div class="set"><h2>Loud &amp; fun</h2><p>The first round: animated, bold and playful.</p></div>
+  <div class="grid">
+    <!-- 1 -->
+    <article class="opt">
+      <div class="art a1"><div class="l1" role="img" aria-label="Bink logo: bouncing ball with B, then ink"><svg aria-hidden="true"><use href="#ballB"/></svg><span>ink</span></div></div>
+      <div class="cap"><div class="n">The Bounce <small>01</small></div><p>Today's logo with personality. The B ball keeps bouncing and "ink" squashes every time it lands.</p></div>
+    </article>
+
+    <!-- 2 -->
+    <article class="opt">
+      <div class="art a2"><div class="l2" role="img" aria-label="Bink logo: spinning ball rocketing ahead of slanted BINK"><span class="fly"><svg aria-hidden="true"><use href="#ball"/></svg></span>BINK</div></div>
+      <div class="cap"><div class="n">Speed Ball <small>02</small></div><p>A spinning ball rockets in with speed lines behind it, ahead of a slanted, sporty BINK.</p></div>
+    </article>
+
+    <!-- 3 -->
+    <article class="opt">
+      <div class="art a3">
+        <svg class="l3" viewBox="0 0 240 180" role="img" aria-label="Bink logo: comic book burst reading BINK!">
+          <polygon id="burstShadow" fill="#121a21" transform="translate(7 7)"/>
+          <polygon id="burst" fill="#b6f03c" stroke="#121a21" stroke-width="3" stroke-linejoin="round"/>
+          <text x="120" y="108" text-anchor="middle" transform="rotate(-7 120 90)" font-family="Bangers,Impact,sans-serif" font-size="66" letter-spacing="2" fill="#121a21" stroke="#fff" stroke-width="7" paint-order="stroke" stroke-linejoin="round">BINK!</text>
+        </svg>
+      </div>
+      <div class="cap"><div class="n">Comic Pop <small>03</small></div><p>Bink sounds like a ball off a paddle, so we wrote it like a comic-book sound effect.</p></div>
+    </article>
+
+    <!-- 4 -->
+    <article class="opt">
+      <div class="art a4">
+        <svg class="l4" viewBox="0 0 240 180" role="img" aria-label="Bink logo: the word bink on a paddle with a ball flying off">
+          <g transform="rotate(-20 118 96)">
+            <rect x="113" y="128" width="22" height="48" rx="6" fill="#2b323a"/>
+            <g stroke="#121a21" stroke-width="2" opacity=".6"><line x1="113" y1="140" x2="135" y2="146"/><line x1="113" y1="152" x2="135" y2="158"/><line x1="113" y1="164" x2="135" y2="170"/></g>
+            <rect x="68" y="14" width="112" height="120" rx="34" fill="#121a21" stroke="#f5f3ee" stroke-width="5"/>
+            <text x="124" y="86" text-anchor="middle" font-family="'Inter Tight',Arial,sans-serif" font-weight="800" font-size="40" letter-spacing="-2" fill="#b6f03c">bink</text>
+          </g>
+          <g class="ballfly">
+            <g stroke="#121a21" stroke-width="3" stroke-linecap="round" opacity=".55"><line x1="168" y1="54" x2="186" y2="46"/><line x1="172" y1="66" x2="190" y2="58"/></g>
+            <use href="#ball" x="188" y="18" width="36" height="36"/>
+          </g>
+        </svg>
+      </div>
+      <div class="cap"><div class="n">The Paddle <small>04</small></div><p>The name lives on the paddle face, with the ball just leaving the sweet spot.</p></div>
+    </article>
+
+    <!-- 5 -->
+    <article class="opt">
+      <div class="art a5"><div class="l5" role="img" aria-label="Bink logo: BINK in letters punched with pickleball holes">BINK</div></div>
+      <div class="cap"><div class="n">Holey Moly <small>05</small></div><p>Every letter is punched full of pickleball holes. Big, bold, and great on shirts.</p></div>
+    </article>
+
+    <!-- 6 -->
+    <article class="opt">
+      <div class="art a6"><div class="l6" role="img" aria-label="Bink logo: a net splits bi and nk, a ball hops over it">bi<span class="net" aria-hidden="true"></span>nk<span class="hx" aria-hidden="true"><span class="hy" style="display:block"><svg><use href="#ball"/></svg></span></span></div></div>
+      <div class="cap"><div class="n">Over the Net <small>06</small></div><p>A net splits the word in two and the ball rallies back and forth over it, forever.</p></div>
+    </article>
+
+    <!-- 7 -->
+    <article class="opt">
+      <div class="art a7">
+        <svg class="l7" viewBox="0 0 240 180" role="img" aria-label="Bink logo: Binky, a winking pickleball mascot, next to the word bink">
+          <ellipse cx="70" cy="150" rx="34" ry="6" fill="#121a21" opacity=".12"/>
+          <g class="body">
+            <circle cx="70" cy="92" r="48" fill="url(#g)" stroke="#121a21" stroke-width="3.5"/>
+            <g fill="#4f7a0c" opacity=".5"><circle cx="40" cy="70" r="3.2"/><circle cx="100" cy="66" r="3.2"/><circle cx="70" cy="52" r="3.2"/><circle cx="34" cy="100" r="3"/><circle cx="106" cy="104" r="3"/><circle cx="70" cy="132" r="3"/></g>
+            <ellipse cx="38" cy="66" rx="10" ry="6" fill="#fff" opacity=".3" transform="rotate(-30 38 66)"/>
+            <ellipse cx="56" cy="86" rx="5.5" ry="8.5" fill="#121a21"/>
+            <ellipse class="wink" cx="84" cy="86" rx="5.5" ry="8.5" fill="#121a21"/>
+            <circle cx="46" cy="104" r="6" fill="#ff8fa8" opacity=".55"/><circle cx="94" cy="104" r="6" fill="#ff8fa8" opacity=".55"/>
+            <path d="M54 106 Q70 122 86 106" fill="none" stroke="#121a21" stroke-width="4" stroke-linecap="round"/>
+            <path d="M26 74 Q70 40 114 74" fill="none" stroke="#2a5c8a" stroke-width="9" stroke-linecap="round"/>
+          </g>
+          <text x="128" y="112" font-family="'Lilita One',Impact,sans-serif" font-size="56" fill="#121a21">bink</text>
+        </svg>
+      </div>
+      <div class="cap"><div class="n">Binky <small>07</small></div><p>A mascot: the ball gets a face, a sweatband and a wink. Perfect for stickers and the app icon.</p></div>
+    </article>
+
+    <!-- 8 -->
+    <article class="opt">
+      <div class="art a8">
+        <svg class="l8" viewBox="0 0 240 180" role="img" aria-label="Bink logo: retro badge with Bink in script and a ring of text">
+          <defs><path id="ringPath" d="M120,90 m-64,0 a64,64 0 1,1 128,0 a64,64 0 1,1 -128,0"/></defs>
+          <circle cx="120" cy="90" r="84" fill="#121a21"/>
+          <circle cx="120" cy="90" r="76" fill="none" stroke="#b6f03c" stroke-width="2"/>
+          <g class="ring"><text font-family="'Inter Tight',Arial,sans-serif" font-weight="800" font-size="11" fill="#f5f3ee"><textPath href="#ringPath" textLength="396" lengthAdjust="spacing">VICTORIA BC · PLAY MORE · MEET MORE ·</textPath></text></g>
+          <use href="#ball" x="109" y="46" width="22" height="22"/>
+          <text x="120" y="108" text-anchor="middle" font-family="Shrikhand,Georgia,serif" font-size="31" fill="#b6f03c">Bink</text>
+        </svg>
+      </div>
+      <div class="cap"><div class="n">Club Badge <small>08</small></div><p>A retro clubhouse patch with a slowly spinning ring of text. Made for hats and merch.</p></div>
+    </article>
+
+    <!-- 9 -->
+    <article class="opt">
+      <div class="art a9"><div class="l9" role="img" aria-label="Bink logo: glowing neon sign">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17" fill="none" stroke="#d6ff6a" stroke-width="2.5"/><g fill="#d6ff6a"><circle cx="20" cy="20" r="2.2"/><circle cx="28" cy="20" r="1.8"/><circle cx="12" cy="20" r="1.8"/><circle cx="24" cy="27" r="1.8"/><circle cx="16" cy="27" r="1.8"/><circle cx="24" cy="13" r="1.8"/><circle cx="16" cy="13" r="1.8"/></g></svg>bink</div></div>
+      <div class="cap"><div class="n">Neon Night <small>09</small></div><p>A flickering neon sign. Made for night games, social mixers and the clubhouse wall.</p></div>
+    </article>
+  </div>
+</div>
+
+<script>
+// Comic burst: a jagged star with a little hand-drawn wobble
+(function () {
+  var pts = [], n = 22, cx = 120, cy = 90;
+  for (var i = 0; i < n * 2; i++) {
+    var a = (Math.PI * i) / n - Math.PI / 2;
+    var r = i % 2 === 0 ? 86 + ((i * 37) % 11) : 58 + ((i * 53) % 9);
+    pts.push((cx + Math.cos(a) * r * 1.18).toFixed(1) + ',' + (cy + Math.sin(a) * r * .92).toFixed(1));
+  }
+  var s = pts.join(' ');
+  document.getElementById('burst').setAttribute('points', s);
+  document.getElementById('burstShadow').setAttribute('points', s);
+})();
+</script>

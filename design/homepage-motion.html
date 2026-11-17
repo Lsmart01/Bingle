@@ -1,0 +1,514 @@
+<title>Bink Moving Hero</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700;800&family=Anton&family=DM+Serif+Display:ital@1&display=swap">
+<style>
+/* Layout: one fixed screen, never scrolls. Split toolbar (links · logo · links) floats over six views.
+   Opens on a deep green intro: a real pickleball drops and bounces, "bink" settles beside it, the logo flies into the toolbar.
+   Home: moving photos with a black left edge, type on the black, a quiet marquee of event types.
+   Colour, "Clubhouse": the court system from the Bink colour report, deepened and desaturated so it reads professional.
+   Chalk ground (60), light pickleball green + court blue (30), bright optic green only on calls to action and highlights (10). */
+:root{
+  --chalk:#f5f3ee; --surface:#ffffff; --ink:#121a21; --muted:#59636c; --rule:#ddd8ce;
+  --green:#c7e35a; --green-ink:#4d6b0f; --green-50:#eef5d6;
+  --court:#2a5c8a; --court-50:#e7edf3;
+  --ball:#b6f03c;
+  --night:#0b0e12;
+  --display:'Inter Tight','Helvetica Neue',Arial,system-ui,sans-serif;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--chalk:#10161b;--surface:#172028;--ink:#eef0ec;--muted:#a3adb5;--rule:#28333c;--green-50:#1d2610;--court-50:#152331;color-scheme:dark}}
+:root[data-theme="dark"]{--chalk:#10161b;--surface:#172028;--ink:#eef0ec;--muted:#a3adb5;--rule:#28333c;--green-50:#1d2610;--court-50:#152331;color-scheme:dark}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;overflow:hidden;background:var(--chalk);color:var(--ink);font-family:var(--sans);font-size:1rem;line-height:1.55}
+img{max-width:100%;display:block}
+a{color:inherit}
+p{margin:0 0 1em;max-width:34rem}
+:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.wrap{max-width:76rem;margin:0 auto;width:100%;padding-left:max(1.5rem,env(safe-area-inset-left,0px));padding-right:max(1.5rem,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.025em;line-height:1;margin:0 0 .45em;text-wrap:balance;text-transform:uppercase}
+h1{font-size:clamp(3rem,6.6vw,6rem);letter-spacing:-.035em;line-height:.92}
+h2{font-size:clamp(1.9rem,3.8vw,3.2rem)}
+h3{font-size:1.05rem;letter-spacing:.01em;line-height:1.2}
+.kicker{font-size:.74rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--green-ink);margin:0 0 .9rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--ball);color:#121a21;font:inherit;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;border:0;border-radius:999px;padding:.8rem 1.4rem;text-decoration:none;cursor:pointer;transition:transform .15s,filter .15s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.04)}
+.btn.ghost{background:transparent;color:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.45)}
+.fine{font-size:.78rem;color:var(--muted);margin:1rem 0 0}
+/* Tags: quiet labels for levels and formats */
+.tg{display:inline-block;font-size:.8rem;font-weight:500;padding:.3rem .75rem;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);white-space:nowrap}
+.tg.dark{background:var(--ink);border-color:var(--ink);color:#fff}
+.tg.ball{background:var(--ball);border-color:var(--ball);color:#121a21}
+
+/* ---------- Logo: a real pickleball + wordmark ---------- */
+/* Club mark: spaced BINK, the ball sits on the I, a fine rule with PICKLEBALL underneath */
+.logo{display:inline-flex;flex-direction:column;align-items:stretch;text-decoration:none;font-family:var(--display);line-height:1;padding-top:.72em}
+.logo .lw{font-weight:700;letter-spacing:.34em;margin-right:-.34em;text-align:center;white-space:nowrap}
+.logo .li{position:relative;display:inline-block}
+.logo .pb{position:absolute;left:calc(50% - .17em);bottom:calc(100% + .07em);width:.52em;height:.52em;margin-left:-.26em}
+.logo .ls{display:flex;align-items:center;gap:.5em;margin-top:.32em;font-weight:600;font-size:.27em;letter-spacing:.32em;white-space:nowrap}
+.logo .ls::before,.logo .ls::after{content:"";flex:1;height:1px;background:currentColor;opacity:.4;min-width:1em}
+
+/* ---------- Toolbar ---------- */
+/* White top bar on every view */
+.nav{position:absolute;inset:0 0 auto;z-index:10;color:#121a21;background:#fff;border-bottom:1px solid rgba(18,26,33,.08);box-shadow:0 2px 14px rgba(18,26,33,.06);padding-top:env(safe-area-inset-top,0px)}
+.nav .btn{background:#121a21;color:#fff}
+.nav .btn:hover{background:var(--ball);color:#121a21}
+#intro .pb{filter:drop-shadow(0 .05em .09em rgba(18,26,33,.45))}
+.nav .wrap{display:flex;align-items:center;gap:2rem;padding-block:.3rem}
+.nav .logo{font-size:1.2rem;order:-1;flex:none}
+.nav .btn{padding:.42rem .95rem;font-size:.7rem}
+.side{display:flex;align-items:center;gap:1.7rem;min-width:0}
+.side.l{margin-left:auto}
+.side a:not(.btn){text-decoration:none;font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.09em;padding:.2rem 0;border-bottom:1px solid transparent;white-space:nowrap;opacity:.85}
+.side a:not(.btn):hover,.side a[aria-current="page"]{border-bottom-color:currentColor;opacity:1}
+
+/* ---------- Views ---------- */
+main{position:absolute;inset:0}
+.view{position:absolute;inset:0;overflow:auto;display:flex;flex-direction:column}
+.view>.wrap{flex:1;display:flex;flex-direction:column;justify-content:center;padding-top:4.2rem;padding-bottom:2.5rem}
+.view:not([hidden]){animation:in .45s ease both}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ===== HOME ===== */
+#home{color:#fff;background:var(--night);overflow:hidden}
+.slides{position:absolute;inset:0;overflow:hidden}
+.slide{position:absolute;inset:0;background-size:cover;background-repeat:no-repeat;opacity:0;will-change:opacity,transform;animation:show 28s linear infinite}
+.slide:nth-child(1){background-image:url(stock/forehand.jpg);background-position:62% 42%;--x:-2%;--y:-1.5%;animation-delay:-1.5s}
+.slide:nth-child(2){background-image:url(stock/volley.jpg);background-position:60% 40%;--x:2%;--y:1%;animation-delay:5.5s}
+.slide:nth-child(3){background-image:url(stock/ball-in-hand.jpg);background-position:center 45%;--x:-1.5%;--y:2%;animation-delay:12.5s}
+.slide:nth-child(4){background-image:url(stock/ball-court.jpg);background-position:center 55%;--x:1.5%;--y:-1.5%;animation-delay:19.5s}
+@keyframes show{0%{opacity:0;transform:scale(1.04)}5%{opacity:1}25%{opacity:1}31%{opacity:0;transform:scale(1.13) translate(var(--x),var(--y))}100%{opacity:0;transform:scale(1.13) translate(var(--x),var(--y))}}
+.edge{position:absolute;inset:0;background:linear-gradient(90deg,var(--night) 0%,rgba(11,14,18,.94) 24%,rgba(11,14,18,.62) 44%,rgba(11,14,18,0) 70%),linear-gradient(180deg,rgba(11,14,18,.4),transparent 18%)}
+#home .wrap{position:relative;align-items:flex-start;padding-bottom:5.5rem}
+.pill{display:inline-flex;align-items:center;gap:.5rem;font-size:.82rem;font-weight:500;padding:.35rem .9rem;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);margin-bottom:1.3rem;letter-spacing:.01em}
+.pill i{width:.45rem;height:.45rem;border-radius:50%;background:var(--ball)}
+/* Marker Block headline: Anton capitals, GAME on a slanted bright green block */
+#home h1{font-family:Anton,Impact,'Arial Narrow',sans-serif;font-weight:400;letter-spacing:.01em;line-height:1;font-size:clamp(3.4rem,8vw,7rem);margin-bottom:.3em}
+#home h1 .hl{display:inline-block;color:#121a21;background:var(--ball);padding:0 .14em;margin-top:.06em;transform:skew(-8deg)}
+#home h1 .hl span{display:inline-block;transform:skew(8deg)}
+.promise{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-weight:400;font-size:clamp(1.5rem,2.4vw,2rem);letter-spacing:-.005em;line-height:1.2;margin-bottom:1.7rem;max-width:30rem}
+.promise b{color:var(--ball);font-weight:400}
+.ctas{display:flex;gap:.7rem;flex-wrap:wrap}
+.marquee{position:absolute;left:0;right:0;bottom:0;border-top:1px solid rgba(255,255,255,.1);background:rgba(11,14,18,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow:hidden;white-space:nowrap}
+.track{display:inline-flex;animation:slide 44s linear infinite;padding-block:.8rem}
+.track span{font-size:.78rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#cfd5da;padding:0 1.6rem;display:inline-flex;align-items:center}
+.track span::after{content:"";width:.35rem;height:.35rem;border-radius:50%;background:var(--ball);margin-left:3.2rem}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ===== EVENTS ===== */
+.ev-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:3.5rem;align-items:center}
+.ev-wrap>*{min-width:0}
+.ev-intro p{color:var(--muted);font-size:1.05rem}
+.ev-types{display:flex;flex-wrap:wrap;gap:.45rem;margin:1.4rem 0 1.6rem}
+.ev-note{display:flex;gap:.8rem;align-items:flex-start;border-top:1px solid var(--rule);padding-top:1.1rem;font-size:.92rem;color:var(--muted);max-width:28rem}
+.ev-note b{color:var(--ink)}
+.ev-note svg{width:1.4rem;height:1.4rem;flex:none;color:var(--green-ink);margin-top:.1rem}
+.enquiry{background:var(--surface);border:1px solid var(--rule);border-radius:1.1rem;padding:1.6rem;box-shadow:0 20px 44px rgba(18,26,33,.07);display:grid;grid-template-columns:1fr 1fr;gap:.9rem 1rem;margin:0}
+.enquiry .full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:.35rem;min-width:0}
+.field label{font-size:.8rem;font-weight:600;color:var(--ink)}
+.field label span{font-weight:400;color:var(--muted)}
+.field input,.field select,.field textarea{font:inherit;font-size:.95rem;color:var(--ink);background:var(--chalk);border:1px solid var(--rule);border-radius:.6rem;padding:.7rem .85rem;width:100%}
+.field textarea{resize:none;height:5.2rem}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--green-ink);outline-offset:1px;border-color:transparent}
+.enquiry .send{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.enquiry .send small{color:var(--muted);font-size:.8rem}
+.enquiry .btn.solid{background:#121a21;color:#fff}
+.sent{grid-column:1/-1;background:var(--green-50);color:var(--green-ink);border-radius:.6rem;padding:.7rem .9rem;font-size:.9rem;font-weight:500}
+.card{position:relative;background:var(--surface);border:1px solid var(--rule);border-radius:1rem;padding:1.3rem 1.35rem;display:flex;flex-direction:column;min-width:0;transition:transform .2s,box-shadow .2s,border-color .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(18,26,33,.08);border-color:transparent}
+.card h3{margin:1rem 0 .35rem}
+.card p{margin:0;color:var(--muted);font-size:.92rem}
+.ico{width:2.5rem;height:2.5rem;border-radius:.7rem;display:grid;place-items:center;background:var(--green-50);color:var(--green-ink)}
+.ico svg{width:1.35rem;height:1.35rem}
+.card:nth-of-type(even) .ico{background:var(--court-50);color:var(--court)}
+.meta{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:auto;padding-top:1rem}
+.feature{grid-row:1 / span 2;background:var(--green);border-color:var(--green);color:#fff;overflow:hidden;padding:1.7rem}
+.feature:hover{box-shadow:0 18px 40px rgba(31,74,58,.3)}
+.feature>*:not(.court-art){position:relative}
+.feature .eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ball)}
+.feature h3{font-size:clamp(2rem,3.4vw,2.8rem);margin:.7rem 0 .5rem}
+.feature p{color:#cfe0d6;font-size:1rem;max-width:22rem}
+.feature .perks{list-style:none;padding:0;margin:1.2rem 0 0;display:grid;gap:.55rem;font-weight:500}
+.feature .perks li{display:flex;gap:.65rem;align-items:center;padding-top:.55rem;border-top:1px solid rgba(255,255,255,.14)}
+.feature .perks li::before{content:"";width:.45rem;height:.45rem;border-radius:50%;background:var(--ball);flex:none}
+.feature .btn{margin-top:auto;align-self:flex-start}
+.court-art{position:absolute;right:-3rem;bottom:-3rem;width:14rem;height:14rem;opacity:.12;pointer-events:none}
+
+/* ===== HOW ===== */
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.8rem}
+.step{background:var(--surface);border:1px solid var(--rule);border-radius:1rem;overflow:hidden;min-width:0;display:flex;flex-direction:column}
+.art{height:9rem;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:.5rem;padding:1rem;border-bottom:1px solid var(--rule)}
+.step:nth-child(1) .art{background:var(--court-50)}
+.step:nth-child(2) .art{background:var(--green-50)}
+.step:nth-child(3) .art{background:var(--chalk)}
+.bubble{background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:1rem 1rem 1rem .25rem;padding:.5rem .9rem;font-weight:500;font-size:.92rem;box-shadow:0 4px 12px rgba(18,26,33,.06)}
+.bubble.me{background:var(--green);color:#121a21;border-color:var(--green);border-radius:1rem 1rem .25rem 1rem}
+.step .txt{padding:1.15rem 1.3rem 1.35rem}
+.step .n{font-size:.72rem;font-weight:700;letter-spacing:.16em;color:var(--court)}
+.step h3{margin:.35rem 0 .35rem}
+.step p{margin:0;color:var(--muted);font-size:.92rem}
+.no{margin-top:1.6rem;display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;font-family:var(--display);font-weight:600;font-size:1.05rem}
+.no s{color:var(--muted);text-decoration-thickness:1.5px}
+.no b{color:var(--green-ink)}
+
+/* ===== COMMUNITY ===== */
+#about{background:var(--green);color:#121a21}
+#about .kicker{color:#3f5710}
+.voices{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.6rem}
+figure{margin:0;display:grid;grid-template-columns:5rem 1fr;gap:1.2rem;align-items:start;background:rgba(255,255,255,.5);border:1px solid rgba(18,26,33,.1);border-radius:1rem;padding:1.35rem;min-width:0}
+figure img{width:5rem;height:5rem;border-radius:50%;object-fit:cover;object-position:center 25%}
+blockquote{margin:0;font-family:var(--display);font-weight:600;font-size:1.18rem;letter-spacing:-.01em;line-height:1.32}
+figcaption{margin-top:.7rem;font-size:.85rem;color:#3d4a24}
+.promises{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.6rem}
+.promises div{border-top:1px solid rgba(18,26,33,.25);padding-top:.9rem}
+.promises b{display:block;font-family:var(--display);font-size:.9rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem}
+.promises span{font-size:.9rem;color:#3d4a24}
+.faq-link{margin:1.6rem 0 0}
+.faq-link a{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;text-underline-offset:4px}
+
+/* ===== FAQ ===== */
+.qa{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem 2.4rem;margin-top:1.8rem}
+.qa div{border-top:1px solid var(--rule);padding-top:1rem;min-width:0}
+.qa h3{font-size:1.12rem;margin-bottom:.4rem}
+.qa p{margin:0;color:var(--muted);font-size:.93rem}
+
+/* ===== JOIN ===== */
+#join{background:var(--night);color:#fff;overflow:hidden}
+#join::before{content:"";position:absolute;inset:0;background:url(stock/ball-court.jpg) center/cover;opacity:.18}
+#join .wrap{align-items:center;text-align:center;position:relative}
+#join h2{font-size:clamp(2.6rem,6.5vw,5.4rem);max-width:14ch}
+#join p{margin-left:auto;margin-right:auto}
+#join .lead{font-size:1.08rem;color:#c3cad1}
+form{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1.2rem}
+#join input[type=email]{font:inherit;padding:.8rem 1.2rem;border-radius:999px;border:1px solid rgba(255,255,255,.25);width:19rem;max-width:100%;color:#fff;background:rgba(255,255,255,.08)}
+#join input[type=email]::placeholder{color:#9aa4ad}
+.sr{position:absolute;left:-9999px}
+.thanks{margin-top:1rem;font-weight:500}
+.join-tags{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:1.8rem}
+.join-tags .tg{background:transparent;border-color:rgba(255,255,255,.25);color:#dfe4e8}
+
+/* ===== INTRO ===== */
+#intro{position:fixed;inset:0;z-index:50;background:var(--ball);display:grid;place-items:center;cursor:pointer;transition:background-color .7s ease .15s;animation:introSafety .4s 3.6s forwards}
+@keyframes introSafety{to{opacity:0;visibility:hidden;pointer-events:none}}
+#intro .logo{color:#121a21;font-size:clamp(3rem,9vw,6.5rem);transform-origin:0 0;transition:transform .85s cubic-bezier(.7,0,.2,1),color .85s}
+#intro .pb{animation:bounce 1s .45s cubic-bezier(.3,0,.5,1) both}
+#intro .lw{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+#intro .ls{animation:rise .5s 1.1s cubic-bezier(.2,.8,.2,1) both}
+#intro.go{background-color:transparent;pointer-events:none}
+body.intro-on .nav .logo{visibility:hidden}
+@keyframes bounce{
+  0%{transform:translateY(-70vh);animation-timing-function:cubic-bezier(.5,0,1,.6)}
+  45%{transform:translateY(0) scale(1.06,.9);animation-timing-function:cubic-bezier(0,.4,.5,1)}
+  65%{transform:translateY(-22%) scale(.97,1.03);animation-timing-function:cubic-bezier(.5,0,1,.6)}
+  82%{transform:translateY(0) scale(1.03,.96)}
+  100%{transform:none}
+}
+@keyframes rise{from{opacity:0;transform:translateX(-.15em)}to{opacity:1;transform:none}}
+
+/* ===== Smaller screens ===== */
+@media (max-width:980px){
+  .ev-wrap{grid-template-columns:1fr;gap:1.6rem}
+}
+@media (max-width:860px){
+  .nav .wrap{flex-wrap:wrap;row-gap:.6rem;gap:1rem}
+  .nav .logo{font-size:1.1rem}
+  .side.r{margin-left:auto}
+  .side.r a:not(.btn){display:none}
+  .side.l{order:3;width:100%;margin-left:0;overflow-x:auto;scrollbar-width:none;gap:1.2rem}
+  .side.l::-webkit-scrollbar{display:none}
+  .view>.wrap{padding-top:6.6rem;justify-content:flex-start}
+  #home .wrap{justify-content:center}
+  .edge{background:linear-gradient(90deg,rgba(11,14,18,.9),rgba(11,14,18,.65))}
+  .how,.voices,.promises,.qa,.enquiry{grid-template-columns:1fr}
+  figure{grid-template-columns:4rem 1fr}
+  figure img{width:4rem;height:4rem}
+}
+@media (min-width:861px){.side.l .m{display:none}}
+@media (prefers-reduced-motion:reduce){
+  .slide,.view:not([hidden]),.track{animation:none}
+  .slide:nth-child(1){opacity:1}
+  #intro{display:none}
+}
+</style>
+
+<!-- The pickleball, drawn once and reused -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="pb-fill" cx="34%" cy="30%" r="78%">
+      <stop offset="0" stop-color="#e2ff8c"/>
+      <stop offset=".55" stop-color="#b6f03c"/>
+      <stop offset="1" stop-color="#7fb81a"/>
+    </radialGradient>
+  </defs>
+  <!-- Cartoon pickleball: flat green, thick outline, bold holes, white shine. Floats above the I. -->
+  <symbol id="pickleball" viewBox="0 0 40 40">
+    <defs><clipPath id="cb-clip"><circle cx="20" cy="20" r="17.5"/></clipPath></defs>
+    <g clip-path="url(#cb-clip)">
+      <rect width="40" height="40" fill="#86c81f"/>
+      <circle cx="17.6" cy="17.4" r="16.2" fill="#b6f03c"/>
+    </g>
+    <g fill="#121a21">
+      <circle cx="20.4" cy="20.2" r="2.5"/><circle cx="28.4" cy="18.6" r="2.2"/><circle cx="12" cy="21.4" r="2.2"/>
+      <circle cx="24.6" cy="27.6" r="2.2"/><circle cx="16" cy="28.2" r="2.1"/><circle cx="23.4" cy="11.8" r="2.1"/><circle cx="14.8" cy="12.8" r="2"/>
+    </g>
+    <path d="M8.6 15.2 Q10.4 9.6 16.4 7.4" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="8" cy="19.2" r="1.3" fill="#fff"/>
+    <circle cx="20" cy="20" r="17.5" fill="none" stroke="#121a21" stroke-width="3"/>
+  </symbol>
+</svg>
+
+<div id="intro" aria-hidden="true"><span class="logo"><span class="lw">B<span class="li">I<svg class="pb" aria-hidden="true"><use href="#pickleball"/></svg></span>NK</span><span class="ls">PICKLEBALL</span></span></div>
+
+<nav class="nav" aria-label="Site">
+  <div class="wrap">
+    <div class="side l">
+      <a href="#events">Events</a>
+      <a href="#about">About us</a>
+      <a href="#players">Find players</a>
+    </div>
+    <a class="logo" href="#home" aria-label="Bink home"><span class="lw">B<span class="li">I<svg class="pb" aria-hidden="true"><use href="#pickleball"/></svg></span>NK</span><span class="ls">PICKLEBALL</span></a>
+    <div class="side r">
+      <a class="btn" href="#join">Join us</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <!-- ===== HOME ===== -->
+  <section class="view" id="home" aria-label="Home">
+    <div class="slides" aria-hidden="true"><div class="slide"></div><div class="slide"></div><div class="slide"></div><div class="slide"></div></div>
+    <div class="edge" aria-hidden="true"></div>
+    <div class="wrap">
+      <span class="pill"><i aria-hidden="true"></i>Victoria's pickleball community</span>
+      <h1>More than a<br><span class="hl"><span>game.</span></span></h1>
+      <p class="promise">Join Victoria's <b>fastest growing</b> community.</p>
+      <div class="ctas">
+        <a class="btn" href="#join">Find people</a>
+        <a class="btn ghost" href="#events">See what's on</a>
+      </div>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="track">
+        <span>Come solo, leave with friends</span><span>Drop-in nights</span><span>Social mixers</span><span>Skills clinics</span><span>King of the Hill</span><span>The Bink Open</span><span>All levels welcome</span>
+        <span>Come solo, leave with friends</span><span>Drop-in nights</span><span>Social mixers</span><span>Skills clinics</span><span>King of the Hill</span><span>The Bink Open</span><span>All levels welcome</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EVENTS ===== -->
+  <section class="view" id="events" aria-label="Events" hidden>
+    <div class="wrap">
+      <div class="ev-wrap">
+        <div class="ev-intro">
+          <p class="kicker">Events</p>
+          <h2>Where the community meets</h2>
+          <p>Drop-ins, clinics, socials and tournaments across Victoria, for every level. Tell us what you're after and we'll get in touch.</p>
+          <div class="ev-types" aria-label="Event types">
+            <span class="tg">Drop-in nights</span><span class="tg">Skills clinics</span><span class="tg">Social mixers</span><span class="tg">King of the Hill</span><span class="tg">The Bink Open</span><span class="tg">Private &amp; team events</span>
+          </div>
+          <div class="ev-note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/></svg>
+            <span><b>We'll reply personally.</b> Someone from the Bink team will reach out with dates, courts and next steps.</span>
+          </div>
+        </div>
+
+        <form class="enquiry" id="event-form">
+          <div class="field">
+            <label for="ev-name">Name</label>
+            <input id="ev-name" name="name" type="text" autocomplete="name" required placeholder="Your name">
+          </div>
+          <div class="field">
+            <label for="ev-email">Email</label>
+            <input id="ev-email" name="email" type="email" autocomplete="email" required placeholder="you@email.com">
+          </div>
+          <div class="field">
+            <label for="ev-phone">Phone <span>(optional)</span></label>
+            <input id="ev-phone" name="phone" type="tel" autocomplete="tel" placeholder="250 555 0123">
+          </div>
+          <div class="field">
+            <label for="ev-level">Your level</label>
+            <select id="ev-level" name="level">
+              <option>New to pickleball</option>
+              <option>2.5 to 3.0</option>
+              <option selected>3.0 to 3.5</option>
+              <option>3.5 to 4.0</option>
+              <option>4.0 and up</option>
+              <option>Not sure</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="ev-type">I'm interested in</label>
+            <select id="ev-type" name="interest">
+              <option>Drop-in nights</option>
+              <option>Skills clinics</option>
+              <option>Social mixers</option>
+              <option>King of the Hill</option>
+              <option>The Bink Open (tournament)</option>
+              <option>A private or team event</option>
+              <option>Hosting an event with Bink</option>
+              <option>Something else</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="ev-msg">Anything else? <span>(optional)</span></label>
+            <textarea id="ev-msg" name="message" placeholder="Days that suit you, group size, questions..."></textarea>
+          </div>
+          <div class="full send">
+            <small>We only use this to get back to you.</small>
+            <button class="btn solid" type="submit">Get in touch</button>
+          </div>
+          <p class="sent" id="ev-sent" role="status" hidden>Thanks! This is a design preview, so nothing was sent. On the live site, the Bink team would get back to you.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section class="view" id="players" aria-label="Find players" hidden>
+    <div class="wrap">
+      <p class="kicker">How it works</p>
+      <h2>Find players at your level</h2>
+      <div class="how">
+        <div class="step">
+          <div class="art" aria-hidden="true"><span class="tg dark">3.5</span><span class="tg">Doubles</span><span class="tg">Social</span><span class="tg">Tue + Thu evenings</span></div>
+          <div class="txt"><span class="n">STEP 1</span><h3>Tell us your game</h3><p>Your level, your style, and the nights you're free. Relaxed or competitive.</p></div>
+        </div>
+        <div class="step">
+          <div class="art" aria-hidden="true"><span class="tg">Player match · 3.5</span><span class="tg">Tuesday drop-in</span><span class="tg ball">You're in</span></div>
+          <div class="txt"><span class="n">STEP 2</span><h3>Match or join an event</h3><p>Meet players who fit, or grab a spot at a drop-in, clinic or mixer.</p></div>
+        </div>
+        <div class="step">
+          <div class="art" aria-hidden="true"><span class="bubble">See you at 6?</span><span class="bubble me">I'll bring balls</span></div>
+          <div class="txt"><span class="n">STEP 3</span><h3>Show up and play</h3><p>After the game, your AI coach asks how it went, so every match fits better.</p></div>
+        </div>
+      </div>
+      <p class="no" aria-label="No buried posts, no mismatched games, no waiting on the sidelines. Just pickleball."><s>Buried posts</s><s>Mismatched games</s><s>Waiting on the sidelines</s><b>Just pickleball.</b></p>
+      <div class="ctas" style="margin-top:1.4rem"><a class="btn" href="#join">Find people</a></div>
+    </div>
+  </section>
+
+  <!-- ===== COMMUNITY ===== -->
+  <section class="view" id="about" aria-label="About us" hidden>
+    <div class="wrap">
+      <p class="kicker">About us</p>
+      <h2>Made by Victoria players, for Victoria players</h2>
+      <div class="voices">
+        <figure>
+          <img src="images/theo-young.jpg" alt="Theo Young" width="386" height="518">
+          <div>
+            <blockquote>"Bink made it effortless to find competition to improve my game, or a partner to complement it."</blockquote>
+            <figcaption>Theo Young, semi-pro player</figcaption>
+          </div>
+        </figure>
+        <figure>
+          <img src="images/alex-and-johahn.jpg" alt="Alex and Johahn" width="900" height="675">
+          <div>
+            <blockquote>"I met Johahn using Bink. Since then we've become a dynamic duo that has won tournaments at the 4.5 level."</blockquote>
+            <figcaption>Alex, with doubles partner Johahn</figcaption>
+          </div>
+        </figure>
+      </div>
+      <div class="promises">
+        <div><b>Fair games</b><span>Matched by level, so every game is fun.</span></div>
+        <div><b>People who show up</b><span>Reviews after every game keep everyone honest.</span></div>
+        <div><b>Safe to meet</b><span>Chat first, play at public courts, report or block anyone.</span></div>
+      </div>
+      <p class="faq-link"><a href="#faq">Questions? Read the FAQ</a></p>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="view" id="faq" aria-label="Questions" hidden>
+    <div class="wrap">
+      <p class="kicker">FAQ</p>
+      <h2>Questions? We've got you.</h2>
+      <div class="qa">
+        <div><h3>Is Bink free?</h3><p>Yes. Matching, chatting and the Bink Open are free for beta members.</p></div>
+        <div><h3>What kind of events?</h3><p>Drop-in nights, skills clinics, social mixers, King of the Hill and tournaments, all sorted by level.</p></div>
+        <div><h3>Can I come on my own?</h3><p>Yes. Most people do. Events are built for meeting new players.</p></div>
+        <div><h3>New, or unsure of my level?</h3><p>Pick the level that feels closest. You can change it any time.</p></div>
+        <div><h3>Can I find a coach?</h3><p>Yes. Browse coaches near you, read reviews, and book lessons or a clinic.</p></div>
+        <div><h3>Is it safe to meet people?</h3><p>You choose who you play with and chat first. You can report or block anyone.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== JOIN ===== -->
+  <section class="view" id="join" aria-label="Join the beta" hidden>
+    <div class="wrap">
+      <h2>Come play with us.</h2>
+      <p class="lead">Join Victoria's pickleball community. Beta members get first access to events and free entry to the Bink Open.</p>
+      <form id="join-form">
+        <label class="sr" for="em">Email</label>
+        <input id="em" name="email" type="email" required placeholder="you@email.com" autocomplete="email">
+        <button class="btn" type="submit">Find people</button>
+      </form>
+      <p class="thanks" id="thanks" hidden>This is a design preview, so nothing was sent. Sign-ups open on the real site.</p>
+      <div class="join-tags" aria-hidden="true"><span class="tg">Free in beta</span><span class="tg">All levels</span><span class="tg">Come solo</span></div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var views = ['home', 'events', 'players', 'about', 'faq', 'join'];
+  var links = document.querySelectorAll('.side a:not(.btn)');
+
+  function show() {
+    var name = location.hash.replace('#', '');
+    if (views.indexOf(name) === -1) name = 'home';
+    views.forEach(function (v) { document.getElementById(v).hidden = v !== name; });
+    document.body.setAttribute('data-view', name);
+    links.forEach(function (a) {
+      if (a.getAttribute('href') === '#' + name) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+  }
+  window.addEventListener('hashchange', show);
+  show();
+
+  document.getElementById('event-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    document.getElementById('ev-sent').hidden = false;
+  });
+
+  document.getElementById('join-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    document.getElementById('thanks').hidden = false;
+  });
+
+  // Intro: the ball drops and bounces, "bink" settles beside it, then the logo flies into the toolbar.
+  var intro = document.getElementById('intro');
+  var big = intro.querySelector('.logo');
+  var small = document.querySelector('.nav .logo');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var done = false;
+
+  function finish() {
+    if (done) return;
+    done = true;
+    intro.remove();
+    document.body.classList.remove('intro-on');
+  }
+  function fly() {
+    if (done) return;
+    var a = big.getBoundingClientRect();
+    var b = small.getBoundingClientRect();
+    big.style.transform = 'translate(' + (b.left - a.left) + 'px,' + (b.top - a.top) + 'px) scale(' + (b.height / a.height) + ')';
+    big.style.color = getComputedStyle(small).color;
+    intro.classList.add('go');
+    setTimeout(finish, 950);
+  }
+
+  if (reduce) { finish(); return; }
+  document.body.classList.add('intro-on');
+  intro.addEventListener('click', fly);
+  setTimeout(fly, 2000);
+  setTimeout(finish, 3500);
+})();
+</script>
