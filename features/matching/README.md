@@ -1,6 +1,8 @@
-# Matching
+# Matchmaking
 
 Takes player profiles and finds players who are a good fit, based on similar skill level, the same play style, nearby location and being open to play.
+
+**Start here:** `components/matchmaking-screen.tsx` is what `/players` shows. It's a placeholder for now; replace it with the real screen.
 
 ## Starting scope
 

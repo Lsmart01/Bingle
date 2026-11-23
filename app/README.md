@@ -7,7 +7,9 @@ The folders in parentheses are route groups. They're left out of the URL, and ea
 | Folder | What it is | Styling | URLs |
 |---|---|---|---|
 | `(website)/` | Public site | Plain CSS in `website.css` | `/` now; later `/about`, `/faq`, `/login`, `/signup` |
-| `(app)/` | Signed-in app | Tailwind, set up in `app.css` | Planned: `/profile`, `/players`, `/events`, `/hill` |
+| `(app)/` | Signed-in app | Tailwind, set up in `app.css` | `/hill`, `/events`, `/players` (placeholders for now); later `/profile` |
+
+The app's header and section tabs are in `(app)/layout.tsx` and `(app)/_components/app-nav.tsx`. To add a tab for a new page, add it to the `tabs` list in `app-nav.tsx`.
 
 A URL can only exist in one group. For example, `/login` can't be in both.
 

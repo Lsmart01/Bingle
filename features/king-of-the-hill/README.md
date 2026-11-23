@@ -2,6 +2,8 @@
 
 Shows players who are on winning streaks and lets others challenge them.
 
+**Start here:** `components/hill-screen.tsx` is what `/hill` shows. It's a placeholder for now; replace it with the real screen.
+
 ## Starting scope
 
 - Leaderboard of current win streaks
