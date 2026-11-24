@@ -26,7 +26,7 @@ The founder also wants **duos and trios** who need 1 or 2 more players to be fin
 ## Non-goals
 
 - Screens. The mockups below show what the backend must support. Building the UI is a separate project.
-- In-app chat, notifications, push messages
+- Notifications and push messages (chat works inside the app only)
 - Learning from behaviour (who people actually message or play with). The weights are fixed numbers for now.
 - Anything special about mixed doubles pairing by gender
 - Running against a live Supabase project. As with the backend foundation, there is no Supabase project yet, and Node.js is not installed on this machine. The scoring tests need Node installed first.
@@ -35,7 +35,7 @@ The founder also wants **duos and trios** who need 1 or 2 more players to be fin
 
 - An empty or near-empty directory. During launch, nothing hides a player except deleting their account.
 - Showing match scores to players. They see the order, never the numbers.
-- Exposing anyone's contact details to strangers.
+- Exposing anyone's phone number or email to other players. People talk through Bink chat and share details there only if they choose to.
 - Changing what the app does today. No current page imports the new code.
 
 ## Approaches considered
@@ -76,7 +76,6 @@ The backend foundation hasn't been built yet, so it and these additions are buil
 - `last_active_at`: updated when the player opens the app
 - `pref_age_min`, `pref_age_max`: optional
 - `pref_gender`: optional, the gender(s) the player wants to play with
-- `contact`: how to reach them (phone, email or social handle, free text). Private, see access rules
 
 **crews** (new): name, home court, format, style (`fun` / `social` / `competitive`), play times (same slots), `is_open` (still looking), created by. A crew has 2 or 3 members and is looking to make 4. "Needs" is 4 minus members, worked out, not stored.
 
@@ -95,8 +94,8 @@ On top of the backend foundation's rules:
 - Anyone can create a game (as its host) or a crew (as a member).
 - Only the host can edit or cancel a game. Any crew member can edit their crew or mark it full.
 - A player can create a join request for themselves. They can see their own requests. The game host, or any crew member, can see requests for it and accept or decline them.
-- **`contact` is private.** It's readable only by the player themselves, or by someone who shares a crew or game with them (after being accepted). The builder may need a separate table or a view to make this column-level rule work.
-- `birth_date` is never sent to other players, only age. Same mechanism as `contact`.
+- `birth_date` is never sent to other players, only age. The builder may need a view or function to make this column-level rule work.
+- Chat: only members of a conversation can read or send its messages. See Stage 2.
 
 ## The scoring
 
@@ -169,6 +168,25 @@ Agreed with the founder. These show what the data has to support:
 - **Create game**: court, when, format, who's already playing, level, optional note. "Needs" is shown, worked out automatically.
 - **Game detail** (tap a game tile): court, time, tags, note, "Who's playing · 3 of 4" with each player's card (host marked), a dashed "open spot" card, and "Ask to join".
 
+## Stage 2: play requests and in-app chat
+
+Decided by the founder. It's built after Stage 1 (everything above: data, ranking, directory, games, crews, join requests), as part of this same design.
+
+**Play requests.** "Ask to play" on a player's profile sends a play request to that player. `join_requests` gains a third possible target, a player, so a request targets exactly one of a crew, a game or a player. The player accepts or declines. The blocking rule still applies: a request to someone who has blocked you is declined automatically, and you aren't told why.
+
+**Chat.**
+- An accepted play request opens a **one-to-one chat** between the two players.
+- Every game and crew has a **group chat**. Its members are the game's players or the crew's members, and anyone accepted later is added.
+- Leaving a game or crew removes you from its chat. A cancelled game's chat becomes read-only.
+- Messages are text only, delivered live (Supabase Realtime) and kept.
+- Phone numbers and emails are never shared automatically. People can type them into chat if they choose.
+
+**Blocking in chat.** Blocking someone ends your one-to-one chat with them, and neither of you can send in it. In a group chat you share, you no longer see messages from someone you blocked. *(Claude's call.)*
+
+**Data:** `conversations` (one-to-one, game or crew, linked to that game or crew), `conversation_members`, and `messages` (conversation, sender, text, sent at). Access rules: only members can read a conversation or post to it.
+
+**Not in Stage 2:** photos or files in chat, read receipts, typing indicators, push notifications, message editing.
+
 ## Calls made by Claude (changeable)
 
 - Bio capped at 150 characters
@@ -176,7 +194,7 @@ Agreed with the founder. These show what the data has to support:
 - Store birth date, show only age; age is shown on cards
 - Time slots are day × morning/afternoon/evening
 - Joining is by request that a host or crew member accepts, never automatic
-- After acceptance, players share contact details; no in-app chat yet
+- Phone numbers aren't stored on profiles; the sign-in email stays private
 - Games show up to 7 days ahead
 - Shuffle is fixed per viewer per day
 - A dealbreaker hit keeps someone out of "Best matches" even with a high score
@@ -190,16 +208,15 @@ Agreed with the founder. These show what the data has to support:
 
 - **Age: Bink is 18+.** Sign-up refuses anyone under 18, based on birth date, which becomes **required**. (14+ was considered first, then dropped to avoid adults and minors exchanging contact details.) The age-preference range starts at 18.
 - **Profile photo is required** at sign-up.
-- **Signed-out visitors can browse the directory**, but must sign in to ask to play, ask to join, post a game or see contact details.
-- **Contact shared on acceptance: phone number and email.** `contact` becomes two private fields, `phone` and `email`, under the same privacy rule.
+- **Signed-out visitors can browse the directory**, but must sign in to ask to play, ask to join, post a game or chat.
+- **Contact happens through in-app chat**, not by sharing phone numbers or email. This replaces an earlier decision to share both. See Stage 2.
 - **Blocking.** A player can block another. Blocked players disappear from each other's directory and court player lists. Games are the exception: if a game includes someone you blocked, it still shows, and tapping "Ask to join" warns you first: "Are you sure? [name] is playing in this match." **Only the person who did the blocking gets this warning.** A blocked person joining a game with their blocker is never told. If two players have blocked each other, both are warned. *(Claude's call: a blocked person's requests to the blocker's own games or crews are declined automatically, without telling them.)*
 - **Bink's own events** (drop-ins, clinics, The Bink Open) show on the live map with confetti over them. They come from the events work, not this design. The map just needs a way to show them.
 - **King of the hill is Ben's.** The `hill_matches` table, streaks and challenge rules from the backend foundation are left to Ben. This design only reads a player's current streak for the +5 bonus. Founder's rule to pass on to Ben: a submitted score needs the opponent's confirmation, and **an opponent who doesn't respond in time is counted as the loser**.
 
 ## Still open (founder to confirm)
 
-1. **In-app chat (decided in part).** Founder decision: "Ask to play" sends a **play request** from one player to another. Once it's accepted, the two can **chat inside Bink**. `join_requests` therefore also allows a player as the target. Still open: whether chat replaces sharing phone and email, and whether games and crews get group chats.
-2. **"Prefer not to say" vs. a gender preference.** Claude's pick: such players **count as outside** a viewer's gender preference. The alternative is to count them as matching, so leaving gender blank never excludes anyone.
+1. **"Prefer not to say" vs. a gender preference.** Claude's pick: such players **count as outside** a viewer's gender preference. The alternative is to count them as matching, so leaving gender blank never excludes anyone.
 ## Follow-up projects (not in this design)
 
 - **Reporting and bans.** Score confirmation already exists (a hill result counts only once both players confirm it). The founder also wants players who lie about scores to be reportable and bannable. That needs reports, a review step and account blocking, and gets its own design.
@@ -207,7 +224,7 @@ Agreed with the founder. These show what the data has to support:
 ## Left to the builder
 
 - Exact column types, enums vs. text checks, and indexes
-- How to keep `contact` and `birth_date` private at the column level (view, separate table, or function)
+- How to keep `birth_date` private at the column level (view, separate table, or function)
 - File layout within `features/matching/` and how the scoring is split into functions
 - Test runner choice (Vitest is a good fit for this Next.js project)
 - Seed data for crews and games, alongside the existing made-up players
