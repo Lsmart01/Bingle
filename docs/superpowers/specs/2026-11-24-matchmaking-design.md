@@ -186,10 +186,21 @@ Agreed with the founder. These show what the data has to support:
 - Missing optional info scores half points and is never a dealbreaker
 - Dealbreakers and strict mode apply to crews and games too; a crew meets a gender preference only if all members do
 
+## Founder decisions (2026-11-24, second round)
+
+- **Age: Bink is 14+.** Sign-up refuses anyone under 14, based on birth date, which becomes **required**. How 14–17s are protected is still open (below).
+- **Profile photo is required** at sign-up.
+- **Signed-out visitors can browse the directory**, but must sign in to ask to play, ask to join, post a game or see contact details.
+- **Contact shared on acceptance: phone number and email.** `contact` becomes two private fields, `phone` and `email`, under the same privacy rule.
+- **Blocking.** A player can block another. Blocked players disappear from each other's directory and court player lists. Games are the exception: if a game includes someone you blocked, it still shows, and tapping "Ask to join" warns you first: "Are you sure? [name] is playing in this match." *(Claude's call: the blocked person is never told, and their requests to the blocker's own games or crews are declined automatically.)*
+- **Bink's own events** (drop-ins, clinics, The Bink Open) show on the live map with confetti over them. They come from the events work, not this design. The map just needs a way to show them.
+- **King of the hill is Ben's.** The `hill_matches` table, streaks and challenge rules from the backend foundation are left to Ben. This design only reads a player's current streak for the +5 bonus. Founder's rule to pass on to Ben: a submitted score needs the opponent's confirmation, and **an opponent who doesn't respond in time is counted as the loser**.
+
 ## Still open (founder to confirm)
 
 1. **"Ask to play" on a solo player's profile.** Requests currently only go to crews and games. Claude's pick: add **player-to-player requests**. Once one is accepted, both see each other's contact. The alternative is that "Ask to play" invites them to a game you post, which needs a time and court up front.
 2. **"Prefer not to say" vs. a gender preference.** Claude's pick: such players **count as outside** a viewer's gender preference. The alternative is to count them as matching, so leaving gender blank never excludes anyone.
+3. **Protections for 14–17-year-olds.** Adults and teens would otherwise exchange phone numbers and meet. See the conversation for the options.
 
 ## Follow-up projects (not in this design)
 
