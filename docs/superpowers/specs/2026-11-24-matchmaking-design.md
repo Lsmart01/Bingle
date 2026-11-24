@@ -1,6 +1,6 @@
 # Matchmaking: for-you ranking, crews and games — design
 
-Date: 2026-11-24 · Status: draft, awaiting approval
+Date: 2026-11-24 · Status: approved and built (Stage 1 and Stage 2 backend; screens not started). See "As built" at the end.
 Builds on: [2026-11-24-supabase-backend-design.md](2026-11-24-supabase-backend-design.md) (courts, players, player_courts, king of the hill). That design stays as approved; this one adds to it and replaces its "placeholder directory order".
 
 ## Why
@@ -228,3 +228,19 @@ Nothing. Last decision (founder, 2026-11-24): **"prefer not to say" players are 
 - File layout within `features/matching/` and how the scoring is split into functions
 - Test runner choice (Vitest is a good fit for this Next.js project)
 - Seed data for crews and games, alongside the existing made-up players
+
+## As built (2026-11-24)
+
+The backend for Stage 1 and Stage 2 is in `supabase/migrations/` and `features/` and is tested with `npm test` (in-memory Postgres; no Supabase project needed). `supabase/README.md` explains how to connect a real project. Calls made while building:
+
+- **Builder's choices from "Left to the builder".** Enums for style, gender and format. Time slots are a checked text array (`thu_evening`). Birth date privacy uses an own-row-only `players` table plus a read-only `player_cards` view that shows age. Every read and write is a database function, called with `supabase.rpc()`. Vitest runs the tests.
+- **Guests.** Games and crews have a `guest_count`: people already playing who aren't on Bink. That's how "who's already playing" works on Create game without adding other players without their consent. A new crew is you plus 1 or 2 guests. Other Bink players join by request.
+- **Crews with someone you blocked** still show, like games, with the same "Are you sure?" warning. Requests from a blocked person to a crew with the blocker in it are declined silently.
+- **A full crew** (4 with guests) closes automatically. When the last Bink member leaves, the crew is deleted.
+- **Hosts can't leave** their own game; they cancel it instead. Cancelling declines waiting requests.
+- **Format scoring for crews and games** follows the table literally. A doubles game scores 5 (some) for a viewer who plays doubles and mixed, and 10 for a viewer who plays only doubles.
+- **Gender left blank** ranks like "prefer not to say".
+- **Signed-out visitors** see the directory ordered by recent activity, and games soonest first. There's no "Best matches" section, because there's nobody to match against.
+- **Blocking a player** also declines their pending requests to you, your games and your crews.
+- **Last-active day only.** Other players see the day someone was last active, never the exact time.
+- **Seed court coordinates are approximate.** Geocode them before the map goes live.
