@@ -1,22 +1,42 @@
-# King of the hill
+# King of the Court
 
-Shows players who are on winning streaks and lets others challenge them.
+Every court has its own leaderboard. Win the most games at a court in the last 30 days and you're King of that court.
 
-**Start here:** `components/hill-screen.tsx` is what `/hill` shows. It's a placeholder for now; replace it with the real screen.
+**Start here:** `components/hill-screen.tsx` is what `/hill` shows. Logging a game is `/hill/log`.
 
-## Starting scope
+## Version 1
 
-- Leaderboard of current win streaks
-- Challenge a player who's on a streak
-- Record match results so streaks update
+- **Court leaderboards:** one per court, with a Singles / Doubles switch. Ranked by wins from confirmed games in the last 30 days; point difference breaks ties. If someone is exactly level with the King, the King stays first.
+- **Log a game:** court, singles or doubles, partner, opponent(s), score, Win or Loss. Scores go to 11, win by 2 (so 11–9 and 12–10 are fine, 11–10 and 13–10 aren't).
+- **Confirm or dispute:** a logged game shows as "Waiting for confirmation" until a player on the other side confirms it. Only confirmed games count. Disputed games don't.
+- **The crown:** first place at a court gets a 👑 on their photo and a "King of [court]" badge. In doubles, both partners get it. Needs at least one win.
+- **Crown history:** past crowns stay on the profile, e.g. "King of Fernwood, Oct 2026". A crown also ends if the King's wins drop out of the 30-day window.
+- **Streak flame:** 🔥 next to a name after 3+ confirmed wins in a row (any court).
+- **Court Regular:** most confirmed games at a court in the last 30 days, singles and doubles together. If players are level, they all get it.
 
-## Depends on
+Not in version 1: skill-level boards, Elo or other ratings, head-to-head stats, partner stats, seasons, push notifications.
 
-- `profile/`: skill level, for fair challenges.
-- `matching/` (possibly): suggest good challengers.
+## Files
 
-## To decide
+| File | What it does |
+|---|---|
+| `logic.ts` | The rules: score check, leaderboard, crowns, streaks, Court Regular. No database. Tested in `logic.test.ts` (`npm test`). |
+| `data.ts` | Reads and writes: board view, profile view, log a game, confirm or dispute. |
+| `store.ts` | Where the data lives for now: `.data/bink-local.json` (git-ignored). |
+| `actions.ts` | Server actions the forms call. |
+| `types.ts` | Player, Court, Game, Crown. Same shape as the Supabase tables. |
+| `components/` | The board, pending games, and the Log a game form. |
 
-- How results are confirmed: do both players have to confirm the score?
-- One hill for everyone, or separate hills by skill level or area?
-- What ends a streak besides a loss, such as not playing for a while?
+## Testing it
+
+There's no sign-in yet, so the app header has a **"Testing as"** menu (`shared/auth/`). Log a game as one sample player, switch to their opponent, and confirm it.
+
+The sample players and courts are all labelled "(sample)" and flagged `isSample`. No games are seeded, so every number on a board comes from games you log. To start over, stop the dev server and delete `.data/bink-local.json`.
+
+## Moving to Supabase
+
+1. Apply `supabase/migrations/20261124000000_king_of_the_court.sql`.
+2. Replace `readDb` / `updateDb` in `data.ts` with Supabase queries. Nothing above `data.ts` changes.
+3. Replace `getViewerId()` in `shared/auth/test-player.ts` with the signed-in user, and remove the "Testing as" menu from `app/(app)/layout.tsx`.
+4. Add the row-level security rules sketched at the top of the migration.
+5. Crown changes run when a game is confirmed and on every board or profile view. In Supabase, move that into a database function, plus a daily job for crowns that expire through the 30-day window.

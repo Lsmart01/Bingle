@@ -7,7 +7,7 @@ The app's real code lives here, one folder per feature. The pages in `app/(app)/
 | Player profile | `profile/` | `/profile` (planned) | Players enter their skill level, play style and other details |
 | Matchmaking | `matching/` | `/players` | Uses profiles to find similar players who are open to play |
 | Live map | `events-map/` | `/events` | Map of local events being hosted |
-| King of the hill | `king-of-the-hill/` | `/hill` | Ranked ladder of players on win streaks, and challenging them |
+| King of the Court | `king-of-the-hill/` | `/hill` | A leaderboard per court; first place wears the crown |
 
 ## Where to start building
 
@@ -15,7 +15,7 @@ Each feature with a page has one entry file. Its page in `app/(app)/` renders th
 
 | Feature | Edit this file |
 |---|---|
-| King of the hill | `king-of-the-hill/components/hill-screen.tsx` |
+| King of the Court | `king-of-the-hill/components/hill-screen.tsx` |
 | Live map | `events-map/components/live-map-screen.tsx` |
 | Matchmaking | `matching/components/matchmaking-screen.tsx` |
 

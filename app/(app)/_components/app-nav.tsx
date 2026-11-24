@@ -5,15 +5,21 @@ import { useSelectedLayoutSegment } from "next/navigation";
 
 // One tab per app feature. Add a tab here when a new feature gets its own page.
 const tabs = [
-  { segment: "hill", href: "/hill", label: "King of the hill" },
+  { segment: "hill", href: "/hill", label: "King of the Court" },
   { segment: "events", href: "/events", label: "Live map" },
   { segment: "players", href: "/players", label: "Matchmaking" },
+  { segment: "profile", href: "/profile", label: "Profile" },
 ];
 
 export function AppNav() {
   // The URL segment under app/(app)/, such as "hill" on /hill.
   const active = useSelectedLayoutSegment();
+  return <AppNavLinks active={active} />;
+}
 
+// The tabs themselves. Also shown with no tab highlighted while a dynamic
+// route like /profile/[id] streams in (the layout wraps AppNav in Suspense).
+export function AppNavLinks({ active }: { active: string | null }) {
   return (
     // Full width under the logo on phones, beside it from the sm breakpoint up.
     <nav aria-label="App sections" className="w-full sm:w-auto">

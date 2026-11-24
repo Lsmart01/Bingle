@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Brainstorm mockups
+.superpowers/
+
+# Local test data for King of the Court (stands in for Supabase)
+.data/

@@ -20,7 +20,7 @@ npm run dev
 
 Then open http://localhost:3000.
 
-Other commands: `npm run build` makes a production build, and `npm run lint` checks the code.
+Other commands: `npm run build` makes a production build, `npm run lint` checks the code, and `npm test` runs the tests.
 
 ## How this repo is organized
 
@@ -28,12 +28,12 @@ Other commands: `npm run build` makes a production build, and `npm run lint` che
 Bink/
 ├── app/                      Pages and URLs (each folder is a URL)
 │   ├── (website)/            Public site: homepage now; about, FAQ, login, sign-up later
-│   └── (app)/                Signed-in app: /hill, /events, /players (placeholders); /profile later
+│   └── (app)/                Signed-in app: /hill (King of the Court), /profile; /events, /players (placeholders)
 ├── features/                 The app's real code, one folder per feature
 │   ├── profile/              Player profiles: skill level, play style, open to play
 │   ├── matching/             Matchmaking: find players like you
 │   ├── events-map/           Live map of local events
-│   └── king-of-the-hill/     Ranked win streaks and challenges
+│   └── king-of-the-hill/     King of the Court: court leaderboards and crowns
 ├── components/               UI used by more than one feature
 ├── shared/                   Used by both the website and the app
 │   ├── auth/                 Sign-in and session handling
