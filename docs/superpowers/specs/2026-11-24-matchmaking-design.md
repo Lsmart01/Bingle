@@ -198,7 +198,7 @@ Agreed with the founder. These show what the data has to support:
 
 ## Still open (founder to confirm)
 
-1. **"Ask to play" on a solo player's profile.** Requests currently only go to crews and games. Claude's pick: add **player-to-player requests**. Once one is accepted, both see each other's contact. The alternative is that "Ask to play" invites them to a game you post, which needs a time and court up front.
+1. **In-app chat (decided in part).** Founder decision: "Ask to play" sends a **play request** from one player to another. Once it's accepted, the two can **chat inside Bink**. `join_requests` therefore also allows a player as the target. Still open: whether chat replaces sharing phone and email, and whether games and crews get group chats.
 2. **"Prefer not to say" vs. a gender preference.** Claude's pick: such players **count as outside** a viewer's gender preference. The alternative is to count them as matching, so leaving gender blank never excludes anyone.
 ## Follow-up projects (not in this design)
 
