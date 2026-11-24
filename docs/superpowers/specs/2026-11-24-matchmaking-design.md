@@ -214,9 +214,9 @@ Decided by the founder. It's built after Stage 1 (everything above: data, rankin
 - **Bink's own events** (drop-ins, clinics, The Bink Open) show on the live map with confetti over them. They come from the events work, not this design. The map just needs a way to show them.
 - **King of the hill is Ben's.** The `hill_matches` table, streaks and challenge rules from the backend foundation are left to Ben. This design only reads a player's current streak for the +5 bonus. Founder's rule to pass on to Ben: a submitted score needs the opponent's confirmation, and **an opponent who doesn't respond in time is counted as the loser**.
 
-## Still open (founder to confirm)
+## Still open
 
-1. **"Prefer not to say" vs. a gender preference.** Claude's pick: such players **count as outside** a viewer's gender preference. The alternative is to count them as matching, so leaving gender blank never excludes anyone.
+Nothing. Last decision (founder, 2026-11-24): **"prefer not to say" players are never hidden.** For a viewer with a gender preference, they rank in "Everyone else" below players who match, in launch mode **and** in strict mode. Strict mode never hides anyone over gender. Players who chose "prefer not to say" still see everyone in their own directory.
 ## Follow-up projects (not in this design)
 
 - **Reporting and bans.** Score confirmation already exists (a hill result counts only once both players confirm it). The founder also wants players who lie about scores to be reportable and bannable. That needs reports, a review step and account blocking, and gets its own design.
