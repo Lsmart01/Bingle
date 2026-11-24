@@ -152,10 +152,10 @@ begin
   insert into public.conversation_members (conversation_id, player_id)
   select id, p[5] from public.conversations where conversations.crew_id = v_crew;
 
-  -- Games, relative to now so they're always upcoming.
+  -- Games, relative to today in Victoria so they're always upcoming, at local times.
   select id into court from public.courts where slug = 'carnarvon-park';
   insert into public.games (court_id, starts_at, format, target_level, play_style, note, host_id, guest_count)
-  values (court.id, date_trunc('day', now()) + interval '2 days 18 hours', 'doubles', 3.5, 'competitive',
+  values (court.id, (date_trunc('day', now() at time zone 'America/Vancouver') + interval '2 days 18 hours') at time zone 'America/Vancouver', 'doubles', 3.5, 'competitive',
           'Bring a light ball if you have one.', p[1], 1)
   returning id into v_game;
   insert into public.game_players (game_id, player_id) values (v_game, p[1]);
@@ -165,7 +165,7 @@ begin
 
   select id into court from public.courts where slug = 'topaz-park';
   insert into public.games (court_id, starts_at, format, target_level, play_style, note, host_id, guest_count)
-  values (court.id, date_trunc('day', now()) + interval '1 day 9 hours', 'singles', 4.5, 'competitive',
+  values (court.id, (date_trunc('day', now() at time zone 'America/Vancouver') + interval '1 day 9 hours') at time zone 'America/Vancouver', 'singles', 4.5, 'competitive',
           null, p[4], 0)
   returning id into v_game;
   insert into public.game_players (game_id, player_id) values (v_game, p[4]);
@@ -175,7 +175,7 @@ begin
 
   select id into court from public.courts where slug = 'fowler-park';
   insert into public.games (court_id, starts_at, format, target_level, play_style, note, host_id, guest_count)
-  values (court.id, date_trunc('day', now()) + interval '3 days 17 hours', 'mixed', null, 'social',
+  values (court.id, (date_trunc('day', now() at time zone 'America/Vancouver') + interval '3 days 17 hours') at time zone 'America/Vancouver', 'mixed', null, 'social',
           'Mixed social, all welcome.', p[8], 0)
   returning id into v_game;
   insert into public.game_players (game_id, player_id) values (v_game, p[8]), (v_game, p[9]);
