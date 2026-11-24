@@ -130,7 +130,7 @@ There's one setting, **strict mode**, off at launch. Turning it on hides dealbre
 
 **Games and crews follow the same dealbreaker rules** as players: in launch mode a hit moves a crew to "Everyone else" and a game to the end of the games strip; in strict mode it hides them. The games strip has no 60-point bar. For a crew, the gender preference counts as met only if every member meets it.
 
-**Missing information never counts against someone.** Formats, skill and style are required at sign-up. Birth date, gender and play times are optional. When something is missing, that metric gets half its points (age 2.5 out of 5, when-they-play 10 out of 20) and is never a dealbreaker.
+**Missing information never counts against someone.** Formats, skill, style, birth date and a profile photo are required at sign-up. Gender and play times are optional. When something is missing, that metric gets half its points (age 2.5 out of 5, when-they-play 10 out of 20) and is never a dealbreaker.
 
 **Not looking.** Players with "open to play" off always go to the very bottom, labelled "Not looking right now", in any mode. Crews marked full aren't listed.
 
@@ -188,7 +188,7 @@ Agreed with the founder. These show what the data has to support:
 
 ## Founder decisions (2026-11-24, second round)
 
-- **Age: Bink is 14+.** Sign-up refuses anyone under 14, based on birth date, which becomes **required**. How 14–17s are protected is still open (below).
+- **Age: Bink is 18+.** Sign-up refuses anyone under 18, based on birth date, which becomes **required**. (14+ was considered first, then dropped to avoid adults and minors exchanging contact details.) The age-preference range starts at 18.
 - **Profile photo is required** at sign-up.
 - **Signed-out visitors can browse the directory**, but must sign in to ask to play, ask to join, post a game or see contact details.
 - **Contact shared on acceptance: phone number and email.** `contact` becomes two private fields, `phone` and `email`, under the same privacy rule.
@@ -200,8 +200,6 @@ Agreed with the founder. These show what the data has to support:
 
 1. **"Ask to play" on a solo player's profile.** Requests currently only go to crews and games. Claude's pick: add **player-to-player requests**. Once one is accepted, both see each other's contact. The alternative is that "Ask to play" invites them to a game you post, which needs a time and court up front.
 2. **"Prefer not to say" vs. a gender preference.** Claude's pick: such players **count as outside** a viewer's gender preference. The alternative is to count them as matching, so leaving gender blank never excludes anyone.
-3. **Protections for 14–17-year-olds.** Adults and teens would otherwise exchange phone numbers and meet. See the conversation for the options.
-
 ## Follow-up projects (not in this design)
 
 - **Reporting and bans.** Score confirmation already exists (a hill result counts only once both players confirm it). The founder also wants players who lie about scores to be reportable and bannable. That needs reports, a review step and account blocking, and gets its own design.
