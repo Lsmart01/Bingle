@@ -1,6 +1,8 @@
-# Events map
+# Live map
 
 A map of local pickleball events, such as tournaments, drop-ins, clinics and social nights.
+
+**Start here:** `components/live-map-screen.tsx` is what `/events` shows. It's a placeholder for now; replace it with the real screen.
 
 ## Starting scope
 

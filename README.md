@@ -28,12 +28,12 @@ Other commands: `npm run build` makes a production build, and `npm run lint` che
 Bink/
 ├── app/                      Pages and URLs (each folder is a URL)
 │   ├── (website)/            Public site: homepage now; about, FAQ, login, sign-up later
-│   └── (app)/                Signed-in app: profile, players, events, hill (not built yet)
+│   └── (app)/                Signed-in app: /hill, /events, /players (placeholders); /profile later
 ├── features/                 The app's real code, one folder per feature
 │   ├── profile/              Player profiles: skill level, play style, open to play
-│   ├── matching/             Matching matrix: find players like you
-│   ├── events-map/           Map of local events
-│   └── king-of-the-hill/     Win streaks and challenges
+│   ├── matching/             Matchmaking: find players like you
+│   ├── events-map/           Live map of local events
+│   └── king-of-the-hill/     Ranked win streaks and challenges
 ├── components/               UI used by more than one feature
 ├── shared/                   Used by both the website and the app
 │   ├── auth/                 Sign-in and session handling
