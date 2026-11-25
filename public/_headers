@@ -1,0 +1,4 @@
+# Cloudflare reads this file when serving static files.
+# Next.js gives every file in /_next/static a unique name, so browsers can keep them for a year.
+/_next/static/*
+  Cache-Control: public,max-age=31536000,immutable
