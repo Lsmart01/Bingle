@@ -14,7 +14,8 @@
 create function private.viewer_profile() returns jsonb
 language sql stable security definer set search_path = '' as $$
   select to_jsonb(c) || jsonb_build_object(
-    'pref_age_min', p.pref_age_min, 'pref_age_max', p.pref_age_max, 'pref_gender', to_jsonb(p.pref_gender))
+    'pref_age_min', p.pref_age_min, 'pref_age_max', p.pref_age_max, 'pref_gender', to_jsonb(p.pref_gender),
+    'courts_visibility', p.courts_visibility)
   from public.players p
   join public.player_cards c on c.id = p.id
   where p.id = (select auth.uid());
@@ -146,13 +147,15 @@ language sql stable security invoker set search_path = '' as $$
 $$;
 
 -- One player's profile. Null if they don't exist or one of you blocked the other.
+-- Their courts are empty unless they let you see them (see player_cards).
 create function public.player_profile(p_player_id uuid) returns jsonb
 language sql stable security invoker set search_path = '' as $$
   select to_jsonb(c) || jsonb_build_object(
     'courts', coalesce((
-      select jsonb_agg(jsonb_build_object('id', ct.id, 'name', ct.name, 'is_home', pc.is_home) order by pc.is_home desc, ct.name)
-      from public.player_courts pc join public.courts ct on ct.id = pc.court_id
-      where pc.player_id = c.id
+      select jsonb_agg(jsonb_build_object('id', ct.id, 'name', ct.name, 'is_home', ct.id = c.home_court_id)
+                       order by ct.id = c.home_court_id desc, ct.name)
+      from public.courts ct
+      where ct.id = any (c.court_ids)
     ), '[]'),
     'hill_streaks', coalesce((
       select jsonb_agg(jsonb_build_object('court_id', h.court_id, 'court_name', ct.name, 'streak', h.streak))
@@ -183,6 +186,8 @@ language sql stable security invoker set search_path = '' as $$
 $$;
 
 -- One court on the map: its players, king of the hill and upcoming games.
+-- The player list only has people who let the caller see their courts, so
+-- it's empty for signed-out visitors. The hill's kings are always shown.
 create function public.court_detail(p_court_id uuid) returns jsonb
 language sql stable security invoker set search_path = '' as $$
   select jsonb_build_object(
@@ -191,15 +196,18 @@ language sql stable security invoker set search_path = '' as $$
       'area', ct.area, 'latitude', ct.latitude, 'longitude', ct.longitude, 'court_count', ct.court_count,
       'is_indoor', ct.is_indoor),
     'players', coalesce((
-      select jsonb_agg(to_jsonb(d) || jsonb_build_object('is_home', pc.is_home)
-                       order by pc.is_home desc, d.open_to_play desc, d.last_active_on desc, d.name)
-      from public.player_courts pc join public.directory_players d on d.id = pc.player_id
-      where pc.court_id = ct.id
+      select jsonb_agg(to_jsonb(d) || jsonb_build_object('is_home', d.home_court_id is not distinct from ct.id)
+                       order by d.home_court_id is not distinct from ct.id desc, d.open_to_play desc,
+                                d.last_active_on desc, d.name)
+      from public.directory_players d
+      where ct.id = any (d.court_ids)
     ), '[]'),
+    -- One king in singles, two in doubles. Null if nobody holds the hill yet.
     'hill', (
-      select jsonb_build_object('player', to_jsonb(c), 'streak', h.streak)
+      select jsonb_build_object('players', jsonb_agg(to_jsonb(c) order by c.name), 'streak', max(h.streak))
       from public.hill_streaks h join public.player_cards c on c.id = h.player_id
       where h.court_id = ct.id
+      having count(*) > 0
     ),
     'games', coalesce((
       select jsonb_agg(jsonb_build_object(
@@ -213,6 +221,29 @@ language sql stable security invoker set search_path = '' as $$
   )
   from public.courts ct
   where ct.id = p_court_id;
+$$;
+
+-- Hill results you played in over the last 30 days, newest first. can_answer
+-- is true while you can still confirm or dispute one (you're on the side that
+-- didn't record it, and the window hasn't closed).
+create function public.my_hill_results() returns jsonb
+language sql stable security invoker set search_path = '' as $$
+  select coalesce(jsonb_agg(jsonb_build_object(
+    'id', m.id, 'court_id', m.court_id, 'format', m.format, 'score', m.score, 'played_at', m.played_at,
+    'recorded_by', m.recorded_by, 'status', m.status,
+    'counts', private.hill_result_counts(m.status, m.created_at),
+    'auto_confirms_at', case when m.status = 'pending' then m.created_at + private.hill_confirm_window() end,
+    'can_answer', m.status = 'pending' and not private.hill_result_counts(m.status, m.created_at)
+                  and mine.won is distinct from rec.won,
+    'winner_ids', (select jsonb_agg(hp.player_id order by hp.player_id) from public.hill_match_players hp
+                   where hp.match_id = m.id and hp.won),
+    'loser_ids', (select jsonb_agg(hp.player_id order by hp.player_id) from public.hill_match_players hp
+                  where hp.match_id = m.id and not hp.won)
+  ) order by m.played_at desc), '[]')
+  from public.hill_matches m
+  join public.hill_match_players mine on mine.match_id = m.id and mine.player_id = (select auth.uid())
+  left join public.hill_match_players rec on rec.match_id = m.id and rec.player_id = m.recorded_by
+  where m.played_at > now() - interval '30 days';
 $$;
 
 -- Requests waiting on you (incoming) and ones you've sent (outgoing).
@@ -282,8 +313,8 @@ language sql stable security invoker set search_path = '' as $$
 $$;
 
 revoke execute on function public.my_requests(), public.my_conversations(),
-  public.get_messages(uuid, bigint, int) from public, anon;
+  public.get_messages(uuid, bigint, int), public.my_hill_results() from public, anon;
 grant execute on function public.my_requests(), public.my_conversations(),
-  public.get_messages(uuid, bigint, int) to authenticated;
+  public.get_messages(uuid, bigint, int), public.my_hill_results() to authenticated;
 grant execute on function public.for_you_inputs(), public.game_detail(uuid), public.crew_detail(uuid),
   public.player_profile(uuid), public.list_courts(), public.court_detail(uuid) to anon, authenticated;

@@ -5,6 +5,9 @@ export type PlayStyle = "fun" | "social" | "competitive";
 export type Gender = "woman" | "man" | "non_binary" | "prefer_not_to_say";
 export type PlayFormat = "singles" | "doubles" | "mixed";
 export type RequestStatus = "pending" | "accepted" | "declined";
+/** Who can see which courts a player plays at: any signed-in player, or only people they share a chat with. */
+export type CourtVisibility = "players" | "connections";
+export type HillResultStatus = "pending" | "confirmed" | "disputed";
 
 export const DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
 export const DAY_PARTS = ["morning", "afternoon", "evening"] as const;
@@ -32,6 +35,10 @@ export type PlayerCard = {
   area: string | null;
   /** The day (Victoria time) they last opened Bink, as YYYY-MM-DD. */
   last_active_on: string;
+  /**
+   * Their courts. Null and empty when you aren't allowed to see them: you're
+   * signed out, or they only show their courts to people they're connected with.
+   */
   home_court_id: string | null;
   court_ids: string[];
 };
@@ -41,6 +48,7 @@ export type ViewerProfile = PlayerCard & {
   pref_age_min: number | null;
   pref_age_max: number | null;
   pref_gender: Gender[] | null;
+  courts_visibility: CourtVisibility;
 };
 
 export type CourtSummary = { id: string; name: string; area: string };

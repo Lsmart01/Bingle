@@ -194,7 +194,11 @@ export const askToJoinGame = (client: RpcClient, gameId: string) =>
 export const askToJoinCrew = (client: RpcClient, crewId: string) =>
   call<string>(client, "request_to_join_crew", { p_crew_id: crewId });
 
-/** "Ask to play" on a player's profile. Returns the request id. */
+/**
+ * "Ask to play" on a player's profile. Returns the request id. If they had
+ * already asked you, this answers theirs: both requests are accepted and the
+ * one-to-one chat opens (check the status in getMyRequests).
+ */
 export const askToPlay = (client: RpcClient, playerId: string) =>
   call<string>(client, "request_to_play", { p_player_id: playerId });
 

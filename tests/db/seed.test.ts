@@ -53,7 +53,7 @@ test("signed-out visitors see the whole directory", async () => {
 test("Topaz shows Ben as king on a 2-game streak", async () => {
   const topaz = (await getCourts(db.as(null))).find((c) => c.slug === "topaz-park")!;
   const hill = await getCourtHill(db.as(null), topaz.id);
-  expect(hill).toMatchObject({ streak: 2, player: { name: "Ben" } });
+  expect(hill).toMatchObject({ streak: 2, players: [{ name: "Ben" }] });
   const detail = await getCourtDetail(db.as(MAYA), topaz.id);
   expect(detail!.players.map((p) => p.name)).toEqual(expect.arrayContaining(["Ben", "Sam", "Mia"]));
 });

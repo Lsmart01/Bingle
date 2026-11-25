@@ -244,3 +244,12 @@ The backend for Stage 1 and Stage 2 is in `supabase/migrations/` and `features/`
 - **Blocking a player** also declines their pending requests to you, your games and your crews.
 - **Last-active day only.** Other players see the day someone was last active, never the exact time.
 - **Seed court coordinates are approximate.** Geocode them before the map goes live.
+
+## Fixes after the matchmaking research (2026-11-24)
+
+From [reports/Matchmaking backends for Bink.md](../../../reports/Matchmaking%20backends%20for%20Bink.md). Made in the migrations directly, since no Supabase project exists yet.
+
+- **King of the hill handles doubles.** A result is 1 v 1 (singles) or 2 v 2 (doubles, mixed): `hill_matches` plus `hill_match_players` (who played, which side won). Results are recorded with `record_hill_match()`. The hill is the winning side of the latest result, so a doubles hill has two kings. The streak belongs to that exact side, so a new partner starts a new streak. One hill per court, whatever the format.
+- **Results can't get stuck.** Whoever records a result vouches for their side. It counts once someone on the other side confirms it, or automatically after 24 hours if nobody there disputes it (the founder's rule: an opponent who doesn't respond in time takes the loss). `dispute_hill_match()` within 24 hours stops it counting. `my_hill_results()` lists what's waiting on you.
+- **Courts are private by default to signed-out visitors.** Which courts someone plays at is hidden from signed-out visitors and from anyone blocked either way. Each player has a `courts_visibility` setting: `players` (any signed-in player, the default, so the court map works) or `connections` (only people they share a chat with). Hidden courts score as unknown in the ranking. The hill's kings, crews' home courts and posted games stay public, since those are shared on purpose.
+- **Asking each other at the same time.** `request_to_play()` takes a lock on the pair first. If the other player has already asked you, your request answers theirs: both are accepted and the chat opens.

@@ -28,7 +28,7 @@ function card(id: string, o: Partial<PlayerCard> = {}): PlayerCard {
 
 const viewer: ViewerProfile = {
   ...card("viewer"),
-  pref_age_min: null, pref_age_max: null, pref_gender: null,
+  pref_age_min: null, pref_age_max: null, pref_gender: null, courts_visibility: "players",
 };
 
 function inputs(o: Partial<ForYouInputs> = {}): ForYouInputs {

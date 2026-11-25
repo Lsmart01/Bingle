@@ -148,26 +148,4 @@ describe("writes go through the functions", () => {
   });
 });
 
-describe("king of the hill", () => {
-  test("a result counts only once both players confirm", async () => {
-    const [{ id }] = await db.as(ANA).sql<{ id: string }>(
-      `insert into public.hill_matches (court_id, winner_id, loser_id, score, winner_confirmed, recorded_by)
-       select id, $1, $2, '11-4', true, $1 from public.courts where slug = 'topaz' returning id`,
-      [ANA, BO],
-    );
-    expect(await db.as(null).sql(`select * from public.hill_streaks`)).toHaveLength(0);
-    expect((await db.as(BO).rpc("confirm_hill_match", { p_match_id: id })).error).toBeNull();
-    const streaks = await db.as(null).sql<{ player_id: string; streak: number }>(`select * from public.hill_streaks`);
-    expect(streaks).toEqual([expect.objectContaining({ player_id: ANA, streak: 1 })]);
-  });
-
-  test("you can't confirm a result for your opponent", async () => {
-    await expect(
-      db.as(ANA).sql(
-        `insert into public.hill_matches (court_id, winner_id, loser_id, score, loser_confirmed, recorded_by)
-         select id, $1, $2, '11-4', true, $1 from public.courts where slug = 'topaz'`,
-        [ANA, BO],
-      ),
-    ).rejects.toThrow(denied);
-  });
-});
+// King of the hill has its own file: hill.test.ts. Court privacy: courts.test.ts.

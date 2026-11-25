@@ -4,7 +4,7 @@ Shows players who are on winning streaks and lets others challenge them.
 
 **Start here:** `components/hill-screen.tsx` is what `/hill` shows. It's a placeholder for now; replace it with the real screen.
 
-**Backend (a starting point for Ben):** the `hill_matches` table and `hill_streaks` view are in `supabase/migrations/20261124120000_core.sql`, and `data.ts` has `getCourtHill()` and `confirmHillMatch()`. A result counts once both players confirm it. Matchmaking only relies on `hill_streaks` having `court_id`, `player_id` and `streak`, so the rest can be reshaped. Still to build: the founder's rule that an opponent who doesn't confirm in time counts as the loser.
+**Backend (a starting point for Ben):** the `hill_matches` and `hill_match_players` tables and the `hill_streaks` view are in `supabase/migrations/20261124120000_core.sql`. `data.ts` has `getCourtHill()`, `recordHillMatch()`, `confirmHillMatch()`, `disputeHillMatch()` and `getMyHillResults()`. Results are singles (1 v 1) or doubles (2 v 2). A result counts once someone on the other side confirms it, or automatically after 24 hours if they don't dispute it. The window is `private.hill_confirm_window()`. Matchmaking only relies on `hill_streaks` having `court_id`, `player_id` and `streak`, so the rest can be reshaped.
 
 ## Starting scope
 
@@ -19,6 +19,6 @@ Shows players who are on winning streaks and lets others challenge them.
 
 ## To decide
 
-- How results are confirmed: do both players have to confirm the score?
+- Separate singles and doubles hills at the same court? (Today there's one hill per court.)
 - One hill for everyone, or separate hills by skill level or area?
 - What ends a streak besides a loss, such as not playing for a while?

@@ -132,6 +132,7 @@ declare
   court record;
   v_crew uuid;
   v_game uuid;
+  v_match uuid;
 begin
   -- Crews: Thursday Carnarvon regulars (2 on Bink + 1 guest) need a fourth.
   select id into court from public.courts where slug = 'carnarvon-park';
@@ -187,9 +188,14 @@ begin
 
   -- Ben holds the hill at Topaz on a 2-game streak.
   select id into court from public.courts where slug = 'topaz-park';
-  insert into public.hill_matches (court_id, winner_id, loser_id, score, played_at, winner_confirmed, loser_confirmed, recorded_by)
-  values (court.id, p[4], p[27], '11-8', now() - interval '3 days', true, true, p[4]),
-         (court.id, p[4], p[23], '11-6', now() - interval '1 day', true, true, p[4]);
+  insert into public.hill_matches (court_id, format, score, played_at, recorded_by, status)
+  values (court.id, 'singles', '11-8', now() - interval '3 days', p[4], 'confirmed')
+  returning id into v_match;
+  insert into public.hill_match_players (match_id, player_id, won) values (v_match, p[4], true), (v_match, p[27], false);
+  insert into public.hill_matches (court_id, format, score, played_at, recorded_by, status)
+  values (court.id, 'singles', '11-6', now() - interval '1 day', p[4], 'confirmed')
+  returning id into v_match;
+  insert into public.hill_match_players (match_id, player_id, won) values (v_match, p[4], true), (v_match, p[23], false);
 end $$;
 
 drop table seed_players;

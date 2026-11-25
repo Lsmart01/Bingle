@@ -279,7 +279,23 @@ language sql security definer set search_path = '' as $$
   values (c, p) on conflict do nothing;
 $$;
 
-revoke execute on function private.require_player(), private.add_to_conversation(uuid, uuid) from public;
+-- Opens (or reuses) the one-to-one chat between two players, with both in it.
+create function private.open_direct_chat(a uuid, b uuid) returns uuid
+language plpgsql security definer set search_path = '' as $$
+declare
+  k text := least(a, b)::text || ':' || greatest(a, b)::text;
+  conv uuid;
+begin
+  insert into public.conversations (kind, direct_key) values ('direct', k)
+    on conflict (direct_key) do nothing;
+  select id into conv from public.conversations where direct_key = k;
+  perform private.add_to_conversation(conv, a);
+  perform private.add_to_conversation(conv, b);
+  return conv;
+end $$;
+
+revoke execute on function private.require_player(), private.add_to_conversation(uuid, uuid),
+  private.open_direct_chat(uuid, uuid) from public;
 
 -- ---------------------------------------------------------------------------
 -- Games
@@ -488,11 +504,14 @@ begin
   return new_id;
 end $$;
 
+-- If they've already asked you, your request answers theirs: both are
+-- accepted and the one-to-one chat opens.
 create function public.request_to_play(p_player_id uuid) returns uuid
 language plpgsql security definer set search_path = '' as $$
 declare
   me uuid := private.require_player();
   existing uuid;
+  theirs uuid;
   new_id uuid;
 begin
   if p_player_id = me then
@@ -505,10 +524,28 @@ begin
     raise exception 'Unblock this player before asking them to play.' using errcode = 'check_violation';
   end if;
 
+  -- Two players asking each other at the same moment would otherwise each
+  -- miss the other's request and both sit waiting. This lock makes requests
+  -- between the same two players take turns, so the second always sees the first.
+  perform pg_advisory_xact_lock(
+    hashtextextended('play:' || least(me, p_player_id)::text || ':' || greatest(me, p_player_id)::text, 0));
+
   select id into existing from public.join_requests
    where requester_id = me and player_id = p_player_id and status = 'pending';
   if existing is not null then
     return existing;
+  end if;
+
+  select id into theirs from public.join_requests
+   where requester_id = p_player_id and player_id = me and status = 'pending'
+   for update;
+  if theirs is not null and not private.is_blocked_between(me, p_player_id) then
+    update public.join_requests set status = 'accepted', responded_at = now() where id = theirs;
+    perform private.open_direct_chat(me, p_player_id);
+    insert into public.join_requests (requester_id, player_id, status, responded_at)
+    values (me, p_player_id, 'accepted', now())
+    returning id into new_id;
+    return new_id;
   end if;
 
   insert into public.join_requests (requester_id, player_id, status, responded_at)
@@ -542,7 +579,6 @@ declare
   g public.games;
   c public.crews;
   conv uuid;
-  k text;
 begin
   select * into r from public.join_requests where id = p_request_id for update;
   -- Careful: every branch must be true/false, never null, or `not (...)` lets anyone through.
@@ -588,11 +624,7 @@ begin
     select id into conv from public.conversations where crew_id = c.id;
 
   else
-    k := least(r.requester_id, me)::text || ':' || greatest(r.requester_id, me)::text;
-    insert into public.conversations (kind, direct_key) values ('direct', k)
-      on conflict (direct_key) do nothing;
-    select id into conv from public.conversations where direct_key = k;
-    perform private.add_to_conversation(conv, me);
+    conv := private.open_direct_chat(r.requester_id, me);
   end if;
 
   perform private.add_to_conversation(conv, r.requester_id);

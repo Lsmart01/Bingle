@@ -45,7 +45,8 @@ describe("games", () => {
 
     const court = await getCourtDetail(db.as(null), courtId);
     expect(court!.games.map((g) => g.id)).toEqual([gameId]);
-    expect(court!.players).toHaveLength(5);
+    expect(court!.players).toHaveLength(0); // signed out: nobody's courts are shown
+    expect((await getCourtDetail(db.as(P2), courtId))!.players).toHaveLength(4); // everyone but P2
     expect((await getCourts(db.as(null)))[0]).toMatchObject({ name: "Carnarvon Park", open_game_count: 1 });
 
     // Signed-out visitors can open the game, but see no requests or chat.
@@ -189,6 +190,24 @@ describe("play requests, chat and blocking", () => {
     const id = await askToPlay(db.as(P2), P3);
     expect(await cancelRequest(db.as(P2), id)).toBe(true);
     expect((await getMyRequests(db.as(P3))).incoming).toEqual([]);
+  });
+
+  test("two players asking each other match straight away", async () => {
+    const first = await askToPlay(db.as(P3), P2);
+    const second = await askToPlay(db.as(P2), P3);
+
+    const statuses = async (p: string) =>
+      (await getMyRequests(db.as(p))).outgoing.filter((r) => r.id === first || r.id === second).map((r) => r.status);
+    expect(await statuses(P2)).toEqual(["accepted"]);
+    expect(await statuses(P3)).toEqual(["accepted"]);
+    expect((await getMyRequests(db.as(P2))).incoming).toEqual([]);
+    expect((await getMyRequests(db.as(P3))).incoming).toEqual([]);
+
+    const chat = (await getConversations(db.as(P2))).find(
+      (c) => c.kind === "direct" && c.members.some((m) => m.id === P3),
+    );
+    expect(chat).toBeDefined();
+    await sendMessage(db.as(P3), chat!.id, "Saturday?");
   });
 
   test("blocking ends the one-to-one chat and hides each from the other", async () => {

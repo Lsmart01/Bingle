@@ -3,6 +3,7 @@
 import type { Court, PlayFormat, PlayStyle, PlayerCard } from "@/shared/models";
 import { call, type RpcClient } from "@/shared/supabase/rpc";
 import { MATCH_SETTINGS } from "@/features/matching/scoring/settings";
+import type { CourtHill } from "@/features/king-of-the-hill/data";
 
 export type MapCourt = Court & { open_game_count: number };
 
@@ -23,9 +24,14 @@ export type CourtGame = {
 
 export type CourtDetail = {
   court: Court;
-  /** People who call it home first, then people who play there. Blocked players are left out. */
+  /**
+   * People who call it home first, then people who play there. Only people
+   * who let you see their courts: empty when signed out, and blocked players
+   * and connections-only players you aren't connected with are left out.
+   */
   players: (PlayerCard & { is_home: boolean })[];
-  hill: { player: PlayerCard; streak: number } | null;
+  /** One king in singles, two in doubles. */
+  hill: CourtHill | null;
   /** Listed games: not full, within the next 7 days. */
   games: CourtGame[];
 };

@@ -15,8 +15,9 @@ The design is in `docs/superpowers/specs/2026-11-24-matchmaking-design.md` and `
 
 - **Every read and write is a database function**, called with `supabase.rpc(...)`. The TypeScript wrappers are in `features/matching/data.ts`, `features/matching/chat.ts`, `features/events-map/data.ts` and `features/king-of-the-hill/data.ts`. Pass them a Supabase client signed in as the player.
 - **The "for you" ranking runs in TypeScript** (`features/matching/scoring/`). The database function `for_you_inputs()` gathers what it needs in one call. All the weights are in `features/matching/scoring/settings.ts`.
-- **Privacy.** Only you can read your own `players` row (birth date, match preferences). Everyone else sees `player_cards`, which shows age instead of birth date. `directory_players` is the same minus you and anyone blocked in either direction. Phone numbers and emails are never stored on profiles.
-- **Signed-out visitors** can browse the directory, courts, crews and games. Asking to play or join, posting and chat need a sign-in.
+- **Privacy.** Only you can read your own `players` row (birth date, match preferences) and your own `player_courts` rows. Everyone else sees `player_cards`, which shows age instead of birth date. `directory_players` is the same minus you and anyone blocked in either direction. Phone numbers and emails are never stored on profiles.
+- **Courts on cards.** Which courts someone plays at shows only to signed-in players who aren't blocked either way, and only to connections (people who share a chat) if the player set `courts_visibility = 'connections'`. Otherwise `home_court_id` is null and `court_ids` empty.
+- **Signed-out visitors** can browse the directory, courts, crews and games, but not who plays at which court. Asking to play or join, posting and chat need a sign-in.
 
 Supabase's security advisor will flag `player_cards`, `directory_players` and `hill_streaks` as "security definer views". That's intentional: it's how age is shown while birth date stays hidden. All three are read-only for every role, and the tests check that.
 
