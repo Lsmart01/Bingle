@@ -1,6 +1,7 @@
 # Champion of the Court: design
 
 Date: 2026-11-25 · Status: draft for Ben's approval
+Mockups: `design/champion-of-the-court.html` (open in a browser)
 Builds on: King of the Court version 1 (`features/king-of-the-hill/`, commit 5a220ed) and the shared Supabase schema merged from `main` (`supabase/migrations/20261124120000_core.sql`).
 
 ## Why

@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Champion of the Court: final phone mockups of the agreed design (2026-11-25).
+     Spec: docs/superpowers/specs/2026-11-25-champion-of-the-court-design.md -->
+<title>Champion of the Court</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: a walkthrough of phone screens in rows, one row per part of the feature, captions under each phone */
+:root {
+  /* page chrome (follows the viewer's theme) */
+  --bg: #eef3f2;
+  --fg: #10202b;
+  --muted: #4d6270;
+  --rule: #c9d8d5;
+  --frame: #0d2536;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* the app's own palette (from the approved mockups; the app screens stay light) */
+  --court: #173f5c;
+  --navy: #0d2536;
+  --ball: #e6ef3d;
+  --gold: #f5c518;
+  --ink: #10202b;
+  --ink-2: #4d6270;
+  --line: #d6e2df;
+  --page: #f2f6f5;
+  --mint: #e6f3f0;
+  --teal: #1f8a83;
+  --white: #ffffff;
+  --off: #9fb0b8;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #0a1a25; --fg: #e4edf0; --muted: #9db2bd; --rule: #23394a; --frame: #000c14; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #0a1a25; --fg: #e4edf0; --muted: #9db2bd; --rule: #23394a; --frame: #000c14; color-scheme: dark; }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--body); line-height: 1.5; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 40px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+header.top { display: grid; gap: 10px; max-width: 68ch; }
+.eyebrow { font-family: var(--display); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--display); font-weight: 800; font-size: clamp(32px, 6vw, 52px); line-height: 1.02; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+.lede { font-size: 16px; color: var(--muted); margin: 0; }
+.cast { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--muted); margin-top: 6px; }
+.cast b { color: var(--fg); font-weight: 600; }
+
+section { margin-top: 56px; display: grid; gap: 20px; }
+section > h2 { font-family: var(--display); font-weight: 800; font-size: 24px; margin: 0; text-wrap: balance; display: flex; align-items: baseline; gap: 12px; border-top: 1px solid var(--rule); padding-top: 18px; }
+section > p { margin: 0; max-width: 68ch; color: var(--muted); }
+.row { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; }
+figure.shot { margin: 0; width: 320px; max-width: 100%; display: grid; gap: 12px; }
+figcaption { font-size: 13.5px; color: var(--muted); min-width: 0; }
+figcaption b { color: var(--fg); font-weight: 600; display: block; font-size: 14px; margin-bottom: 2px; }
+
+/* ---------- phone ---------- */
+.phone { background: var(--page); color: var(--ink); border-radius: 30px; padding: 14px; border: 6px solid var(--frame); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 13px; line-height: 1.35; display: grid; gap: 10px; align-content: start; min-height: 520px; position: relative; overflow: hidden; }
+.bar { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px 0; }
+.bar .court { font-weight: 800; font-size: 17px; }
+.bar .court small { display: block; font-size: 11px; font-weight: 600; color: var(--ink-2); }
+.bar .back { font-size: 12px; font-weight: 700; color: var(--court); }
+.switch { display: grid; grid-template-columns: 1fr 1fr; background: var(--white); border-radius: 12px; padding: 3px; border: 1px solid var(--line); }
+.switch span { text-align: center; padding: 6px; border-radius: 9px; font-weight: 700; font-size: 12px; color: var(--ink-2); }
+.switch span.on { background: var(--court); color: var(--white); }
+.note { font-size: 11px; color: var(--ink-2); text-align: center; margin-top: -4px; }
+
+.champ { background: var(--navy); color: var(--white); border-radius: 18px; padding: 16px; display: flex; gap: 16px; align-items: center; }
+.champ .lbl, .lbl { font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ball); }
+.champ .nm { font-size: 17px; font-weight: 800; margin-top: 2px; }
+.champ .sub { font-size: 11px; color: rgba(255,255,255,.72); margin-top: 3px; }
+
+.av { position: relative; width: 56px; height: 56px; flex: none; }
+.av .c { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; color: var(--white); font-weight: 800; font-size: 22px; background: var(--teal); }
+.av.ring .c { box-shadow: 0 0 0 3px var(--navy), 0 0 0 5px var(--gold); }
+.av.sm { width: 30px; height: 30px; }
+.av.sm .c { font-size: 12px; }
+.av.sm.ring .c { box-shadow: 0 0 0 2px var(--white), 0 0 0 4px var(--gold); }
+.av .pd { position: absolute; right: -11px; bottom: -9px; width: 24px; height: 46px; transform: rotate(22deg); filter: drop-shadow(0 1px 2px rgba(0,0,0,.45)); }
+.av.sm .pd { right: -7px; bottom: -7px; width: 14px; height: 27px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.35)); }
+.pair { display: flex; gap: 18px; flex: none; }
+.pair .av { width: 44px; height: 44px; }
+.pair .av .c { font-size: 18px; }
+.pair .av .pd { right: -10px; bottom: -8px; width: 20px; height: 38px; }
+.pair.sm { gap: 12px; }
+.pair.sm .av { width: 30px; height: 30px; }
+.pair.sm .av .c { font-size: 12px; }
+.pair.sm .av .pd { right: -7px; bottom: -7px; width: 14px; height: 27px; }
+
+.nudge { background: var(--white); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: grid; gap: 8px; }
+.nudge .head { font-weight: 800; font-size: 14px; }
+.nudge .head em { font-style: normal; color: var(--teal); }
+.nudge ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.nudge li { display: flex; gap: 8px; font-size: 12.5px; color: var(--ink); }
+.nudge li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ball); box-shadow: 0 0 0 1px #9a9f1a; flex: none; margin-top: 5px; }
+.nudge.lost { background: var(--mint); border-color: transparent; }
+
+.rows { background: var(--white); border-radius: 14px; border: 1px solid var(--line); }
+.r { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-top: 1px solid var(--line); }
+.r:first-child { border-top: 0; }
+.r.me { background: #f7fbd9; }
+.rk { width: 12px; font-weight: 800; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.who { min-width: 0; display: grid; gap: 2px; }
+.who .n { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tag { justify-self: start; font-size: 10px; font-weight: 800; background: var(--mint); color: var(--court); border-radius: 999px; padding: 1px 7px; }
+.w { margin-left: auto; text-align: right; font-variant-numeric: tabular-nums; }
+.w b { display: block; font-weight: 800; font-size: 14px; }
+.w small { font-size: 10px; color: var(--ink-2); }
+.colhead { display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); padding: 0 4px; }
+
+.btn { background: var(--ball); color: var(--ink); font-weight: 800; border-radius: 14px; padding: 11px 16px; text-align: center; font-size: 13px; }
+.btn.dark { background: var(--court); color: var(--white); }
+.btn.ghost { background: var(--white); color: var(--court); border: 1px solid var(--line); }
+.btn.off { background: #e3e9e8; color: var(--off); display: flex; justify-content: center; gap: 8px; align-items: center; }
+.btn.off span { font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; background: var(--white); color: var(--ink-2); border-radius: 999px; padding: 1px 7px; }
+.btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.card { background: var(--white); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: grid; gap: 8px; }
+.card .k { font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); }
+.score { display: flex; align-items: center; justify-content: space-between; font-weight: 800; font-size: 15px; }
+.score .num { font-size: 24px; font-variant-numeric: tabular-nums; }
+.clock { font-size: 12px; color: var(--ink-2); display: flex; gap: 6px; align-items: center; }
+.clock i { width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--teal); flex: none; }
+.toast { background: var(--court); color: var(--white); border-radius: 16px; padding: 14px; display: grid; gap: 4px; }
+.toast b { font-size: 14px; }
+.toast span { font-size: 12.5px; color: rgba(255,255,255,.82); }
+.toast .up { color: var(--ball); font-weight: 800; font-size: 12px; letter-spacing: .04em; }
+
+/* celebration */
+.phone.full { background: radial-gradient(circle at 50% 36%, #1d4f73 0%, var(--navy) 70%); color: var(--white); text-align: center; align-content: center; justify-items: center; gap: 0; }
+.full .av { width: 96px; height: 96px; margin: 18px auto 18px; }
+.full .av .c { font-size: 38px; box-shadow: 0 0 0 4px var(--navy), 0 0 0 7px var(--gold), 0 0 44px 10px rgba(245,197,24,.35); }
+.full .av .pd { right: -20px; bottom: -16px; width: 42px; height: 80px; filter: drop-shadow(0 2px 4px rgba(0,0,0,.5)); }
+.full .big { font-weight: 800; font-size: 27px; line-height: 1.1; }
+.full .sm { font-size: 12.5px; color: rgba(255,255,255,.75); margin-top: 8px; max-width: 24ch; }
+.full .btn { margin-top: 22px; padding-inline: 26px; }
+.conf { position: absolute; width: 7px; height: 11px; border-radius: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .conf { animation: fall 3.4s ease-in-out infinite alternate; }
+  @keyframes fall { from { translate: 0 -6px; } to { translate: 0 10px; } }
+}
+
+/* profile */
+.prof { display: flex; gap: 16px; align-items: center; padding: 6px 4px; }
+.prof .nm { font-weight: 800; font-size: 19px; }
+.prof .line { font-size: 12px; color: var(--ink-2); }
+.prof .tag { margin-top: 4px; display: inline-block; }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 12.5px; }
+.facts dt { color: var(--ink-2); }
+.facts dd { margin: 0; font-weight: 600; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 3px 9px; background: var(--mint); color: var(--court); display: inline-flex; align-items: center; gap: 5px; }
+.badge svg { width: 8px; height: 15px; }
+.hist { font-size: 12px; color: var(--ink-2); }
+.hist b { color: var(--ink); font-weight: 600; }
+
+/* settings */
+.toggle { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.toggle .t { font-weight: 700; font-size: 13.5px; }
+.toggle .d { font-size: 11.5px; color: var(--ink-2); margin-top: 2px; }
+.sw { width: 40px; height: 24px; border-radius: 999px; background: var(--teal); position: relative; flex: none; }
+.sw::after { content: ""; position: absolute; right: 3px; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--white); }
+.private { border: 1.5px dashed #a9bcb8; background: transparent; }
+.missing { font-size: 11px; color: var(--ink-2); text-align: center; }
+
+.titles { display: flex; flex-wrap: wrap; gap: 8px; }
+.titles span { font-size: 12.5px; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 12px; color: var(--muted); }
+.titles b { color: var(--fg); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gface" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3b0"/><stop offset=".4" stop-color="#f5c518"/><stop offset="1" stop-color="#b38600"/></linearGradient>
+    <linearGradient id="gedge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a6400"/><stop offset=".5" stop-color="#c99a06"/><stop offset="1" stop-color="#8a6400"/></linearGradient>
+    <pattern id="grip" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="6" height="6" fill="#173f5c"/><rect width="2" height="6" fill="#0d2536"/></pattern>
+    <symbol id="paddle" viewBox="0 0 48 92">
+      <path d="M8 1 H40 Q47 1 47 8 V44 Q47 52 41 55 L30 60 H18 L7 55 Q1 52 1 44 V8 Q1 1 8 1 Z" fill="url(#gedge)"/>
+      <path d="M9 4 H39 Q44 4 44 9 V43 Q44 49 39 52 L29 56.5 H19 L9 52 Q4 49 4 43 V9 Q4 4 9 4 Z" fill="url(#gface)"/>
+      <path d="M10 8 H22 Q12 18 9 34 V12 Q9 8 10 8 Z" fill="#fff" opacity=".45"/>
+      <path d="M18 56 H30 L29 62 H19 Z" fill="#9a7300"/>
+      <rect x="18.5" y="61" width="11" height="26" rx="2.5" fill="url(#grip)"/>
+      <rect x="17.5" y="86" width="13" height="5" rx="2.5" fill="#e6ef3d" stroke="#9a9f1a" stroke-width=".8"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Bink · design walkthrough · draft</div>
+    <h1>Champion of the Court</h1>
+    <p class="lede">What the agreed design looks like on a phone: Fernwood's board, logging and confirming a game, taking the paddle, a player's profile, doubles, and hiding your courts. These are mockups from the spec, not the built app.</p>
+    <div class="cast"><span>Sample players at Fernwood:</span><span><b>Alex Chen</b> (Queen)</span><span><b>Sam Patel</b></span><span><b>Jordan Lee</b> (you, non-binary → Champion)</span><span><b>Ben Okafor</b></span><span><b>Priya Shah</b></span><span><b>Theo Park</b></span></div>
+  </header>
+
+  <!-- ===================== THE BOARD ===================== -->
+  <section>
+    <h2>Fernwood's board</h2>
+    <p>One board per court, last 30 days, most wins first, then point difference. The champion's card sits on top with the golden paddle. Your personal card shows below it only for you.</p>
+    <div class="row">
+      <figure class="shot">
+        <div class="phone">
+          <div class="bar"><div class="court">Fernwood<small>Champion of the Court · last 30 days</small></div></div>
+          <div class="switch"><span class="on">Singles</span><span>Doubles</span></div>
+          <div class="champ">
+            <div class="av ring"><div class="c" style="background:#5b6abf">A</div><svg class="pd"><use href="#paddle"/></svg></div>
+            <div><div class="lbl">Queen of Fernwood</div><div class="nm">Alex Chen</div><div class="sub">Holding the paddle since Nov 12</div></div>
+          </div>
+          <div class="nudge">
+            <div class="head">You're #3 at Fernwood. <em>Win 3 and the paddle's yours.</em></div>
+            <ul>
+              <li>3 of Alex's wins drop off this week</li>
+              <li>Next up: Sam (#2) is 1 win ahead</li>
+            </ul>
+          </div>
+          <div class="colhead"><span>Player</span><span>Wins · +/−</span></div>
+          <div class="rows">
+            <div class="r"><span class="rk">1</span><span class="av sm ring"><span class="c" style="background:#5b6abf">A</span><svg class="pd"><use href="#paddle"/></svg></span><span class="who"><span class="n">Alex Chen</span></span><span class="w"><b>6</b><small>+24</small></span></div>
+            <div class="r"><span class="rk">2</span><span class="av sm"><span class="c" style="background:#b5562f">S</span></span><span class="who"><span class="n">Sam Patel</span><span class="tag">3 in a row</span></span><span class="w"><b>5</b><small>+15</small></span></div>
+            <div class="r me"><span class="rk">3</span><span class="av sm"><span class="c">J</span></span><span class="who"><span class="n">Jordan Lee (you)</span></span><span class="w"><b>4</b><small>+9</small></span></div>
+            <div class="r"><span class="rk">4</span><span class="av sm"><span class="c" style="background:#2f7d4a">B</span></span><span class="who"><span class="n">Ben Okafor</span></span><span class="w"><b>2</b><small>+3</small></span></div>
+            <div class="r"><span class="rk">5</span><span class="av sm"><span class="c" style="background:#8a4f9e">P</span></span><span class="who"><span class="n">Priya Shah</span></span><span class="w"><b>1</b><small>−2</small></span></div>
+          </div>
+        </div>
+        <figcaption><b>What Jordan sees</b>"Win 3" is the number that guarantees first: Jordan needs 7 wins to Alex's 6, because a tie on wins could still go to the champion. Streaks are a text tag from 3 wins in a row, with no flame.</figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="phone">
+          <div class="bar"><div class="court">Fernwood<small>Champion of the Court · last 30 days</small></div></div>
+          <div class="switch"><span class="on">Singles</span><span>Doubles</span></div>
+          <div class="champ">
+            <div class="av ring"><div class="c">J</div><svg class="pd"><use href="#paddle"/></svg></div>
+            <div><div class="lbl">Champion of Fernwood</div><div class="nm">Jordan Lee</div><div class="sub">Holding the paddle since Nov 24 · 3 in a row</div></div>
+          </div>
+          <div class="nudge lost">
+            <div class="head">Jordan took the Fernwood paddle.</div>
+            <ul>
+              <li>You're 1 win behind. Win 2 to take it back.</li>
+            </ul>
+          </div>
+          <div class="colhead"><span>Player</span><span>Wins · +/−</span></div>
+          <div class="rows">
+            <div class="r"><span class="rk">1</span><span class="av sm ring"><span class="c">J</span><svg class="pd"><use href="#paddle"/></svg></span><span class="who"><span class="n">Jordan Lee</span><span class="tag">3 in a row</span></span><span class="w"><b>7</b><small>+21</small></span></div>
+            <div class="r me"><span class="rk">2</span><span class="av sm"><span class="c" style="background:#5b6abf">A</span></span><span class="who"><span class="n">Alex Chen (you)</span></span><span class="w"><b>6</b><small>+20</small></span></div>
+            <div class="r"><span class="rk">3</span><span class="av sm"><span class="c" style="background:#b5562f">S</span></span><span class="who"><span class="n">Sam Patel</span></span><span class="w"><b>5</b><small>+11</small></span></div>
+            <div class="r"><span class="rk">4</span><span class="av sm"><span class="c" style="background:#2f7d4a">B</span></span><span class="who"><span class="n">Ben Okafor</span></span><span class="w"><b>2</b><small>+3</small></span></div>
+          </div>
+        </div>
+        <figcaption><b>What Alex sees after losing it</b>The next time Alex opens Fernwood's board, the personal card leads with the lost paddle and the wins needed to take it back.</figcaption>
+      </figure>
+    </div>
+    <div class="titles"><span>Title comes from gender:</span><span><b>woman</b> → Queen</span><span><b>man</b> → King</span><span><b>anyone else or blank</b> → Champion</span></div>
+  </section>
+
+  <!-- ===================== LOGGING ===================== -->
+  <section>
+    <h2>Logging and confirming</h2>
+    <p>Logging a win shows where you'd land straight away. The result counts once the other side confirms, or automatically after 24 hours unless they dispute it.</p>
+    <div class="row">
+      <figure class="shot">
+        <div class="phone">
+          <div class="bar"><div class="court">Fernwood<small>Singles</small></div></div>
+          <div class="toast">
+            <span class="up">▲ #3 → #2</span>
+            <b>If Sam confirms, you'd move from #3 to #2 at Fernwood.</b>
+            <span>You'd tie Sam on 5 wins and pass on point difference.</span>
+          </div>
+          <div class="card">
+            <div class="k">Waiting for Sam</div>
+            <div class="score"><span>You</span><span class="num">11 – 7</span><span>Sam</span></div>
+            <div class="clock"><i></i>Counts automatically in 23 h unless Sam disputes it.</div>
+          </div>
+          <div class="btn ghost">See the board</div>
+        </div>
+        <figcaption><b>Jordan, just after logging</b>A loss just says "Game logged. Waiting for Sam to confirm." If the win would make you first, the line becomes "If Sam confirms, you'll be Champion of Fernwood."</figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="phone">
+          <div class="bar"><div class="court">Fernwood<small>Singles</small></div></div>
+          <div class="card">
+            <div class="k">Jordan logged a game</div>
+            <div class="score"><span>Jordan</span><span class="num">11 – 7</span><span>You</span></div>
+            <div class="clock"><i></i>Counts automatically in 18 h unless you dispute it.</div>
+            <div class="btns"><div class="btn dark">Confirm</div><div class="btn ghost">Dispute</div></div>
+          </div>
+          <div class="note">Disputed results never count.</div>
+        </div>
+        <figcaption><b>What Sam sees</b>The same 24-hour clock from the other side. The 24 hours is one setting, matching Graeme's <code>dev</code> branch.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===================== CELEBRATION ===================== -->
+  <section>
+    <h2>Taking the paddle</h2>
+    <p>The first time the new champion opens the app, once per court. No Share button for now.</p>
+    <div class="row">
+      <figure class="shot">
+        <div class="phone full">
+          <span class="conf" style="left:12%;top:11%;background:#e6ef3d;transform:rotate(20deg)"></span>
+          <span class="conf" style="left:82%;top:15%;background:#f5c518;transform:rotate(-30deg);animation-delay:-1s"></span>
+          <span class="conf" style="left:22%;top:76%;background:#1f8a83;transform:rotate(50deg);animation-delay:-2s"></span>
+          <span class="conf" style="left:74%;top:70%;background:#e6ef3d;transform:rotate(-10deg);animation-delay:-.5s"></span>
+          <span class="conf" style="left:50%;top:7%;background:#fff;transform:rotate(70deg);animation-delay:-1.6s"></span>
+          <span class="conf" style="left:88%;top:44%;background:#fff;transform:rotate(15deg);animation-delay:-2.4s"></span>
+          <span class="conf" style="left:7%;top:46%;background:#f5c518;transform:rotate(-45deg);animation-delay:-.9s"></span>
+          <div class="lbl">New Champion</div>
+          <div class="av ring"><div class="c">J</div><svg class="pd"><use href="#paddle"/></svg></div>
+          <div class="big">You're the Champion<br>of Fernwood</div>
+          <div class="sm">You passed Alex with your 7th win this month · 3 in a row</div>
+          <div class="btn">See the board</div>
+        </div>
+        <figcaption><b>Jordan, next time they open Bink</b>If Jordan took two paddles since last looking, each court gets its own screen in turn. If Jordan won it and lost it again before opening the app, there's no celebration.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===================== PROFILE ===================== -->
+  <section>
+    <h2>Tapping a player</h2>
+    <p>Every name and photo on a board opens that player's profile, with their record at the court you were looking at.</p>
+    <div class="row">
+      <figure class="shot">
+        <div class="phone">
+          <div class="bar"><span class="back">‹ Fernwood</span></div>
+          <div class="prof">
+            <div class="av"><div class="c" style="background:#b5562f">S</div></div>
+            <div><div class="nm">Sam Patel</div><span class="tag">3 in a row at Fernwood</span><div class="line">9 games at Fernwood · last 30 days</div></div>
+          </div>
+          <div class="card">
+            <div class="k">Matchmaking profile</div>
+            <dl class="facts">
+              <dt>Skill</dt><dd>3.5</dd>
+              <dt>Style</dt><dd>Competitive</dd>
+              <dt>Plays</dt><dd>Singles, doubles, mixed</dd>
+              <dt>Home court</dt><dd>Fernwood</dd>
+            </dl>
+            <div class="line" style="font-size:12.5px">Weekday evenings, usually after 6. Happy to drill third shots before a game.</div>
+          </div>
+          <div class="btn off">Ask to play <span>Coming soon</span></div>
+          <div class="badges"><span class="badge">📍 Court Regular · Fernwood</span></div>
+          <div class="hist"><b>Paddle history</b><br>King of Fernwood, Oct 2026 · Singles · Oct 3 to Oct 21</div>
+        </div>
+        <figcaption><b>Sam's profile, opened from Fernwood</b>No direct messages. Ask to play sends a request, and chat opens only once Sam accepts. It stays "Coming soon" until matchmaking's request and chat screens exist.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===================== DOUBLES ===================== -->
+  <section>
+    <h2>Doubles, including mixed</h2>
+    <p>Mixed games count on the doubles board. Both partners hold the title, and the pair's titles combine.</p>
+    <div class="row">
+      <figure class="shot">
+        <div class="phone">
+          <div class="bar"><div class="court">Fernwood<small>Champion of the Court · last 30 days</small></div></div>
+          <div class="switch"><span>Singles</span><span class="on">Doubles</span></div>
+          <div class="note">Doubles and mixed games</div>
+          <div class="champ">
+            <div class="pair">
+              <div class="av ring"><div class="c" style="background:#2f7d4a">B</div><svg class="pd"><use href="#paddle"/></svg></div>
+              <div class="av ring"><div class="c" style="background:#5b6abf">A</div><svg class="pd"><use href="#paddle"/></svg></div>
+            </div>
+            <div><div class="lbl">King &amp; Queen of Fernwood</div><div class="nm">Ben &amp; Alex</div><div class="sub">Holding the paddle since Nov 8</div></div>
+          </div>
+          <div class="nudge">
+            <div class="head">You and Theo are #3. <em>Win 4 together and the paddle's yours.</em></div>
+            <ul><li>Next up: Sam &amp; Priya (#2) are 2 wins ahead</li></ul>
+          </div>
+          <div class="rows">
+            <div class="r"><span class="rk">1</span><span class="pair sm"><span class="av sm ring"><span class="c" style="background:#2f7d4a">B</span><svg class="pd"><use href="#paddle"/></svg></span><span class="av sm ring"><span class="c" style="background:#5b6abf">A</span><svg class="pd"><use href="#paddle"/></svg></span></span><span class="who"><span class="n">Ben &amp; Alex</span></span><span class="w"><b>5</b><small>+19</small></span></div>
+            <div class="r"><span class="rk">2</span><span class="pair sm"><span class="av sm"><span class="c" style="background:#b5562f">S</span></span><span class="av sm"><span class="c" style="background:#8a4f9e">P</span></span></span><span class="who"><span class="n">Sam &amp; Priya</span><span class="tag">3 in a row</span></span><span class="w"><b>4</b><small>+12</small></span></div>
+            <div class="r me"><span class="rk">3</span><span class="pair sm"><span class="av sm"><span class="c">J</span></span><span class="av sm"><span class="c" style="background:#c0892a">T</span></span></span><span class="who"><span class="n">Jordan (you) &amp; Theo</span></span><span class="w"><b>2</b><small>+4</small></span></div>
+          </div>
+        </div>
+        <figcaption><b>The Doubles tab</b>Both partners get the gold ring and paddle, on the card and on the board. Two women read "Queens of Fernwood", two men "Kings", and any pair with a Champion reads "Champions". Games are still saved as mixed, so a separate Mixed board can be added later.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===================== HIDING ===================== -->
+  <section>
+    <h2>Hiding where you play</h2>
+    <p>Players who hide their courts are left off boards entirely. Their games still count for their opponents, and they can still see their own stats. Here Priya has turned the setting on.</p>
+    <div class="row">
+      <figure class="shot">
+        <div class="phone">
+          <div class="bar"><div class="court">Fernwood<small>Champion of the Court · last 30 days</small></div></div>
+          <div class="switch"><span class="on">Singles</span><span>Doubles</span></div>
+          <div class="rows">
+            <div class="r"><span class="rk">1</span><span class="av sm ring"><span class="c" style="background:#5b6abf">A</span><svg class="pd"><use href="#paddle"/></svg></span><span class="who"><span class="n">Alex Chen</span></span><span class="w"><b>6</b><small>+24</small></span></div>
+            <div class="r"><span class="rk">2</span><span class="av sm"><span class="c" style="background:#b5562f">S</span></span><span class="who"><span class="n">Sam Patel</span><span class="tag">3 in a row</span></span><span class="w"><b>5</b><small>+15</small></span></div>
+            <div class="r"><span class="rk">3</span><span class="av sm"><span class="c">J</span></span><span class="who"><span class="n">Jordan Lee</span></span><span class="w"><b>4</b><small>+9</small></span></div>
+            <div class="r"><span class="rk">4</span><span class="av sm"><span class="c" style="background:#2f7d4a">B</span></span><span class="who"><span class="n">Ben Okafor</span></span><span class="w"><b>2</b><small>+3</small></span></div>
+          </div>
+          <div class="missing">No "Hidden player" row. Sam &amp; Priya also leave the doubles board.</div>
+        </div>
+        <figcaption><b>What everyone else sees</b>Priya's row is gone, but Alex's win over Priya still counts for Alex. A doubles pair shows only if both partners are visible.</figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="phone">
+          <div class="bar"><div class="court">Fernwood<small>Champion of the Court · last 30 days</small></div></div>
+          <div class="card private">
+            <div class="k">Only you can see this</div>
+            <div style="font-weight:700">Your courts are hidden, so you're not on Fernwood's boards.</div>
+            <div class="line" style="font-size:12.5px;color:var(--ink-2)">Your last 30 days here: 3 games · 1 win · −2</div>
+          </div>
+          <div class="card">
+            <div class="toggle">
+              <div><div class="t">Hide the courts I play at</div><div class="d">You won't appear on court boards or hold a paddle. Your games still count for the people you play.</div></div>
+              <span class="sw" role="img" aria-label="On"></span>
+            </div>
+          </div>
+          <div class="note">Turning this on hands any paddle you hold to the next player.</div>
+        </div>
+        <figcaption><b>What Priya sees</b>In version 1 this is a local switch, off by default, that you can flip from the "Testing as" menu until Graeme's setting reaches <code>main</code>.</figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="phone">
+          <div class="bar"><div class="court">Fernwood<small>Singles</small></div></div>
+          <div class="toast">
+            <b>Your first game at Fernwood is logged.</b>
+            <span>Games you log show on this court's board. You can hide your courts in settings.</span>
+          </div>
+          <div class="card">
+            <div class="k">Waiting for Ben</div>
+            <div class="score"><span>You</span><span class="num">9 – 11</span><span>Ben</span></div>
+            <div class="clock"><i></i>Counts automatically in 24 h unless Ben disputes it.</div>
+          </div>
+        </div>
+        <figcaption><b>Someone's first game at a court</b>The one-time note says plainly that boards are visible, and where to turn that off.</figcaption>
+      </figure>
+    </div>
+  </section>
+</div>
+</body>
+</html>
