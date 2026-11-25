@@ -1,5 +1,5 @@
 // Dates in Victoria's time zone, so "today", game days and evenings are local
-// no matter where the code runs (Vercel servers run on UTC).
+// no matter where the code runs (Cloudflare servers run on UTC).
 import type { Day, DayPart } from "@/shared/models";
 import { MATCH_SETTINGS, type MatchSettings } from "./settings";
 

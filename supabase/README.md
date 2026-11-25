@@ -43,7 +43,7 @@ This runs the real migrations in PGlite, an in-memory Postgres. A small stand-in
    ```
 
    Never put the `service_role` key in a `NEXT_PUBLIC_` variable.
-6. Add the same two variables to the hosting provider (for example, Vercel).
+6. Add the same two variables to the hosting provider (Cloudflare Workers).
 
 `createBinkClient()` in `shared/supabase/client.ts` reads these variables. Server-side sessions for signed-in players (cookies via `@supabase/ssr`) come with the sign-in screens.
 
@@ -53,3 +53,4 @@ For local development with the full Supabase stack (needs Docker), run `supabase
 
 - Geocode the courts. The seed coordinates are approximate, because the court research found no source for them.
 - Strict mode is off (`strictMode` in `features/matching/scoring/settings.ts`). Turn it on once a typical player has 30+ people scoring 60 or more.
+- When the project is upgraded to a paid plan, keep **Spend Cap** on (Organization settings → Billing). With it on, Supabase restricts the project when it goes over the plan's quotas instead of billing for the extra. Compute upgrades and add-ons are still billed. Turn it off only on purpose, after setting up usage alerts.

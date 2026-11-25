@@ -1,0 +1,31 @@
+// Cloudflare Workers settings for hosting Bink. `npm run deploy` reads this file.
+// See https://developers.cloudflare.com/workers/wrangler/configuration/
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "bink",
+	// The server code that OpenNext builds from the Next.js app
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2026-11-23",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	// Serve the site on binkpb.com and www.binkpb.com. Deploying creates the DNS records.
+	"routes": [
+		{ "pattern": "binkpb.com", "custom_domain": true },
+		{ "pattern": "www.binkpb.com", "custom_domain": true }
+	],
+	// No *.workers.dev address. The site lives only on the domains above.
+	"workers_dev": false,
+	"preview_urls": false,
+	// Pages, scripts and images that never change between requests
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	// Lets next/image resize and compress images through Cloudflare Images
+	"images": {
+		"binding": "IMAGES"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true
+}

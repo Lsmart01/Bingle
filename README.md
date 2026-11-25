@@ -7,7 +7,7 @@ Find pickleball players your level in Victoria.
 - **Next.js 16** (React and TypeScript): the website and the app in one project
 - **Tailwind CSS**: styling for the app (the website keeps its own CSS)
 - **Supabase**: database, login and live chat. The schema and backend are built and tested; no live project is connected yet (see `supabase/README.md`)
-- **Vercel**: hosting
+- **Cloudflare Workers**: hosting, through the OpenNext adapter. Cloudflare also runs the binkpb.com domain
 
 ## Run it locally
 
@@ -20,7 +20,7 @@ npm run dev
 
 Then open http://localhost:3000.
 
-Other commands: `npm run build` makes a production build, `npm run lint` checks the code, `npm run typecheck` checks the types, and `npm test` runs the tests, including the database ones (no Supabase or Docker needed).
+Other commands: `npm run build` makes a production build, `npm run lint` checks the code, `npm run typecheck` checks the types, and `npm test` runs the tests, including the database ones (no Supabase or Docker needed). `npm run preview` runs the production build in Cloudflare's runtime at http://localhost:8787. Before deploying, run `npm run preview` to catch anything that works in `npm run dev` but breaks on Cloudflare.
 
 ## How this repo is organized
 
@@ -50,9 +50,16 @@ Each folder has a README with more detail.
 
 ## Deploying
 
-Bink is hosted on Vercel. To set it up, import this GitHub repo at [vercel.com/new](https://vercel.com/new). Vercel detects Next.js, so the default settings work. After that, every push to `main` updates the live site, and every other branch gets its own preview link.
+Bink runs on Cloudflare Workers. [OpenNext](https://opennext.js.org/cloudflare) turns the Next.js build into a Worker. The settings are in `wrangler.jsonc` (the Worker) and `open-next.config.ts` (the adapter).
 
-Vercel's free plan is for non-commercial projects only, so Bink needs the Pro plan.
+To deploy from your computer, run `npm run deploy`. The first time, it opens a browser so you can log in to Cloudflare. The Mapbox token is baked into the build, so `.env.local` must have it.
+
+To deploy automatically on every push to `main`, connect this GitHub repo to the `bink` Worker in the Cloudflare dashboard (**Workers & Pages → bink → Settings → Builds**). Use `npx opennextjs-cloudflare build` as the build command and `npx opennextjs-cloudflare deploy` as the deploy command, and add `NEXT_PUBLIC_MAPBOX_TOKEN` as a build variable.
+
+Two things to know:
+
+- `cacheComponents` is off in `next.config.ts` because pages hang on Workers with it on. Check the link in that file before turning it back on.
+- Pages can't refresh themselves after a deploy (`revalidate`) until the R2 cache is set up. See `open-next.config.ts`.
 
 ## Notes for coding agents
 
