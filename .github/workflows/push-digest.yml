@@ -1,0 +1,47 @@
+# Emails an AI overview of what bencaswell2003-spec pushed to main.
+# Needs these repo secrets (Settings > Secrets and variables > Actions):
+#   ANTHROPIC_API_KEY  - Claude API key
+#   MAIL_USERNAME      - Gmail address that sends the email
+#   MAIL_PASSWORD      - a Gmail app password for that address (not the normal password)
+#   MAIL_TO            - comma-separated recipient addresses
+name: Push digest
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  digest:
+    if: github.actor == 'bencaswell2003-spec'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Write the overview with Claude
+        id: overview
+        run: |
+          npm install --no-save --prefix "$RUNNER_TEMP/digest" @anthropic-ai/sdk
+          NODE_PATH="$RUNNER_TEMP/digest/node_modules" node .github/scripts/push-digest.cjs
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.event.after }}
+          PUSHER: ${{ github.actor }}
+          COMPARE_URL: ${{ github.event.compare }}
+          OUT_DIR: ${{ runner.temp }}
+      - name: Send the email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          from: Bink push digest <${{ secrets.MAIL_USERNAME }}>
+          to: ${{ secrets.MAIL_TO }}
+          subject: ${{ steps.overview.outputs.subject }}
+          body: file://${{ runner.temp }}/digest-body.txt
