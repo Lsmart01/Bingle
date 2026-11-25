@@ -31,7 +31,7 @@ const MARQUEE = [
   "Drop-in nights",
   "Social mixers",
   "Skills clinics",
-  "King of the Hill",
+  "Champion of the Court",
   "The Bink Open",
   "All levels welcome",
 ];
@@ -209,7 +209,7 @@ export function Site() {
                   and we'll get in touch.
                 </p>
                 <div className="ev-types" aria-label="Event types">
-                  {["Drop-in nights", "Skills clinics", "Social mixers", "King of the Hill", "The Bink Open", "Private & team events"].map(
+                  {["Drop-in nights", "Skills clinics", "Social mixers", "Champion of the Court", "The Bink Open", "Private & team events"].map(
                     (t) => (
                       <span className="tg" key={t}>
                         {t}
@@ -356,7 +356,7 @@ export function Site() {
               </div>
               <div>
                 <h3>What kind of events?</h3>
-                <p>Drop-in nights, skills clinics, social mixers, King of the Hill and tournaments, all sorted by level.</p>
+                <p>Drop-in nights, skills clinics, social mixers, Champion of the Court and tournaments, all sorted by level.</p>
               </div>
               <div>
                 <h3>Can I come on my own?</h3>

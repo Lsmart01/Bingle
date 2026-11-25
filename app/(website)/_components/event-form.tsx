@@ -61,7 +61,7 @@ export function EventForm() {
           <option>Drop-in nights</option>
           <option>Skills clinics</option>
           <option>Social mixers</option>
-          <option>King of the Hill</option>
+          <option>Champion of the Court</option>
           <option>The Bink Open (tournament)</option>
           <option>A private or team event</option>
           <option>Hosting an event with Bink</option>
