@@ -1,5 +1,5 @@
 // Run with: npm test
-import { test } from "node:test";
+import { test } from "vitest";
 import assert from "node:assert/strict";
 import { buildBoard, checkScore, courtRegular, crownChanges, kingOf, winStreak } from "./logic.ts";
 import type { Crown, Game } from "./types.ts";

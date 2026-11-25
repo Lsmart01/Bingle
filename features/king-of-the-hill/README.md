@@ -4,6 +4,8 @@ Every court has its own leaderboard. Win the most games at a court in the last 3
 
 **Start here:** `components/hill-screen.tsx` is what `/hill` shows. Logging a game is `/hill/log`.
 
+**Supabase backend (from the shared matchmaking work):** the `hill_matches` table and `hill_streaks` view are in `supabase/migrations/20261124120000_core.sql`, and the bottom of `data.ts` has `getCourtHill()` and `confirmHillMatch()`. Matchmaking only relies on `hill_streaks` having `court_id`, `player_id` and `streak`, so the rest can be reshaped. Version 1 below still runs on the local file and doesn't use them yet.
+
 ## Version 1
 
 - **Court leaderboards:** one per court, with a Singles / Doubles switch. Ranked by wins from confirmed games in the last 30 days; point difference breaks ties. If someone is exactly level with the King, the King stays first.
@@ -35,8 +37,9 @@ The sample players and courts are all labelled "(sample)" and flagged `isSample`
 
 ## Moving to Supabase
 
-1. Apply `supabase/migrations/20261124000000_king_of_the_court.sql`.
-2. Replace `readDb` / `updateDb` in `data.ts` with Supabase queries. Nothing above `data.ts` changes.
+Version 1's own database file was removed when the shared Supabase schema was merged in, because both created `players`, `courts` and `games` tables. The plan:
+
+1. Point version 1 at the shared schema's `hill_matches` and `hill_streaks`, adding what it lacks (doubles partners, crown history).
+2. Replace `readDb` / `updateDb` in `data.ts` with Supabase calls. Nothing above `data.ts` changes.
 3. Replace `getViewerId()` in `shared/auth/test-player.ts` with the signed-in user, and remove the "Testing as" menu from `app/(app)/layout.tsx`.
-4. Add the row-level security rules sketched at the top of the migration.
-5. Crown changes run when a game is confirmed and on every board or profile view. In Supabase, move that into a database function, plus a daily job for crowns that expire through the 30-day window.
+4. Crown changes run when a game is confirmed and on every board or profile view. In Supabase, move that into a database function, plus a daily job for crowns that expire through the 30-day window.

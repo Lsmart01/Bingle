@@ -1,5 +1,6 @@
-# Runs on every push and pull request: installs, lints and builds the site.
-# A red X on GitHub means a change broke the build.
+# Runs on every push and pull request: installs, lints, typechecks, runs the
+# tests (including the database, in an in-memory Postgres) and builds the site.
+# A red X on GitHub means a change broke something.
 name: Check
 
 on:
@@ -17,4 +18,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
       - run: npm run build

@@ -4,6 +4,8 @@
 import { buildBoard, checkScore, courtRegular, crownChanges, hasFlame, sideKey, winStreak } from "./logic";
 import { readDb, updateDb, type Db } from "./store";
 import type { Court, Crown, Format, Game, Player } from "./types";
+import type { PlayerCard } from "@/shared/models";
+import { call, type RpcClient } from "@/shared/supabase/rpc";
 
 // ---------------------------------------------------------------- crowns
 
@@ -246,3 +248,23 @@ export async function respondToGame(gameId: string, playerId: string, response: 
     return null;
   });
 }
+
+// ---------------------------------------------------------------- Supabase (from Graeme's backend)
+
+
+/** The current king of a court and their streak, or null if nobody holds it yet. */
+export async function getCourtHill(
+  client: RpcClient,
+  courtId: string,
+): Promise<{ player: PlayerCard; streak: number } | null> {
+  const detail = await call<{ hill: { player: PlayerCard; streak: number } | null } | null>(
+    client,
+    "court_detail",
+    { p_court_id: courtId },
+  );
+  return detail?.hill ?? null;
+}
+
+/** Confirm a result you played in. It counts once both players confirm. */
+export const confirmHillMatch = (client: RpcClient, matchId: string) =>
+  call<boolean>(client, "confirm_hill_match", { p_match_id: matchId });
