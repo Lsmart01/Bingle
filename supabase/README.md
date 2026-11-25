@@ -4,7 +4,7 @@ Bink's database: tables, access rules and functions, as Supabase migrations.
 
 | File | What's in it |
 |---|---|
-| `migrations/20261124120000_core.sql` | Courts, players, the courts each player uses, blocking, king of the hill |
+| `migrations/20261124120000_core.sql` | Courts, players, the courts each player uses, blocking, Champion of the Court (`hill_matches`) |
 | `migrations/20261124120100_crews_games_chat.sql` | Crews, games, requests (join a crew or game, or ask a player to play), chat, and every write function |
 | `migrations/20261124120200_reads.sql` | The read functions the app calls (directory inputs, game, crew, profile, courts, requests, chat) |
 | `seed.sql` | Local development data: the real Victoria courts (approximate coordinates) and 30 made-up players, 2 crews, 3 games |

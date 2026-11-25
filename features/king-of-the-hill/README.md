@@ -1,6 +1,6 @@
-# King of the Court
+# Champion of the Court
 
-Every court has its own leaderboard. Win the most games at a court in the last 30 days and you're King of that court.
+Every court has its own leaderboard. Win the most games at a court in the last 30 days and you're Champion of that court (King or Queen).
 
 **Start here:** `components/hill-screen.tsx` is what `/hill` shows. Logging a game is `/hill/log`.
 

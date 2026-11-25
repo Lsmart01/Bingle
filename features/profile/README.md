@@ -1,6 +1,6 @@
 # Player profile
 
-Where players tell us about themselves. Matching and king of the hill both read from the profile, so its fields need to be consistent and comparable between players.
+Where players tell us about themselves. Matching and Champion of the Court both read from the profile, so its fields need to be consistent and comparable between players.
 
 ## Starting fields
 
@@ -12,7 +12,7 @@ Where players tell us about themselves. Matching and king of the hill both read 
 ## Used by
 
 - `matching/`: compares profiles to find similar players.
-- `king-of-the-hill/`: uses skill level to keep challenges fair.
+- `king-of-the-hill/` (Champion of the Court): uses skill level to keep challenges fair.
 
 ## To decide
 
